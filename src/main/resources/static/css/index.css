@@ -1,0 +1,17 @@
+.bg {
+    background-image: url("../img/bg.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#joinPlaylistBox {
+    position: fixed;
+    width: 300px;
+    height: 180px;
+    top: 50%;
+    left: 50%;
+    margin-top: -90px;
+    margin-left: -150px;
+    display: none;
+}

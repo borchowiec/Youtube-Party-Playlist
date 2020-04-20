@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Youtube Party Playlist</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
-    <link rel="stylesheet" href="css/style.css">
 
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <link rel="stylesheet" href="css/index.css">
+
 </head>
 <body>
 <section class="hero is-success is-fullheight bg">
@@ -46,10 +46,10 @@
                 <div class="column is-4 is-offset-4">
                     <div class="columns">
                         <div class="column is-6">
-                            <button class="button is-link is-fullwidth">My playlist</button>
+                            <button class="button is-link is-fullwidth" id="myPlaylistBtn">My playlist</button>
                         </div>
                         <div class="column is-6">
-                            <button class="button is-link is-light is-fullwidth">Join playlist</button>
+                            <button class="button is-link is-light is-fullwidth" id="joinPlaylistBtn">Join playlist</button>
                         </div>
                     </div>
                 </div>
@@ -57,5 +57,22 @@
         </div>
     </div>
 </section>
+
+<div class="notification is-link" id="joinPlaylistBox">
+    <button class="delete"></button>
+    <div class="field">
+        <div class="control">
+            <input class="input is-info playlistId" type="text" placeholder="Playlist ID">
+        </div>
+    </div>
+    <button class="button is-link is-light is-fullwidth joinBtn">Join</button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+        integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+        crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script src="js/index.js"></script>
+
 </body>
 </html>
