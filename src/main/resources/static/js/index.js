@@ -6,7 +6,15 @@ $("#myPlaylistBtn").on("click", () => {
 })
 
 $("#joinPlaylistBtn").on("click", () => {
-    $("#joinPlaylistBox").show();
+    const nickname = $(".nicknameInput").val().trim();
+    if (nickname.length === 0) {
+        const errorLabel = $(".nickErrorMsg");
+        errorLabel.text("You should type your nickname");
+        errorLabel.show();
+    }
+    else {
+        $("#joinPlaylistBox").show();
+    }
 })
 
 $("#joinPlaylistBox .delete").on("click", () => {
@@ -14,8 +22,15 @@ $("#joinPlaylistBox .delete").on("click", () => {
 })
 
 $("#joinPlaylistBox .joinBtn").on("click", () => {
-    const id = $("#joinPlaylistBox .playlistId").val();
-    window.open(`/playlist/${id}`, "_self");
+    const id = $("#joinPlaylistBox .playlistId").val().trim();
+    if (id.length === 0) {
+        const errorLabel = $(".idErrorMsg");
+        errorLabel.text("You should type id of playlist");
+        errorLabel.show();
+    }
+    else {
+        window.open(`/playlist/${id}`, "_self");
+    }
 })
 
 $(document).ready(function(){
