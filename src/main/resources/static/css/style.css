@@ -1,0 +1,11 @@
+.playlistTitle {
+    margin-top: 50px;
+}
+
+#idSpan {
+    font-style: italic;
+}
+
+.idHeader {
+    cursor: pointer;
+}

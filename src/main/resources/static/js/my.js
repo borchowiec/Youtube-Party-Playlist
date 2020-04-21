@@ -85,24 +85,14 @@ function loadDummyPlaylist() {
     data.forEach((title, index) => $("#playlistBody").append(createPlaylistElement(index, title)));
 }
 
-/**
- * Copies id of playlist to clipboard.
- */
-function copyId() {
-    const $temp = $("<input>");
-    $("body").append($temp);
-    $temp.val($("#idSpan").text()).select();
-    document.execCommand("copy");
-    $temp.remove();
-    $("#copyMessage").show();
-    setTimeout(function() { $("#copyMessage").hide(); }, 3000);
-}
-
-$(document).ready(function(){
+$(document).ready(function() {
     $("#togglePlayBtn").on("click", () => togglePlay());
     $("#prevBtn").on("click", () => console.log("previous")); // todo previous song
     $("#nextBtn").on("click", () => console.log("next")); // todo next song
-    $(".idHeader").on("click", () => copyId());
+    $(".idHeader").on("click", () => {
+        copyContentOfElementToClipboard("#idSpan");
+        showElement("#copyMessage", 3000);
+    });
     loadDummyPlaylist(); // todo load real data
     initYoutubeIframe();
 });

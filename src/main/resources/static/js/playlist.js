@@ -32,7 +32,9 @@ function copyId() {
 }
 
 $(document).ready(function() {
-    $(".idHeader").on("click", () => copyId());
+    $(".idHeader").on("click", () => {
+        copyContentOfElementToClipboard("#idSpan");
+        showElement("#copyMessage", 3000);
+    });
     loadDummyPlaylist(); // todo load real data
-    initYoutubeIframe();
 });

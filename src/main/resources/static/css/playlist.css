@@ -1,15 +1,3 @@
 .currentTitle {
     font-style: italic;
 }
-
-.playlistTitle {
-    margin-top: 50px;
-}
-
-#idSpan {
-    font-style: italic;
-}
-
-.idHeader {
-    cursor: pointer;
-}
