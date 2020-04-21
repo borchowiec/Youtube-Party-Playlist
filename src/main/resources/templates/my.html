@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Youtube Party Playlist</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <link rel="stylesheet" href="/css/my.css">
+</head>
+<body>
+
+<nav class="navbar is-success" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            Youtube Party Playlist
+        </a>
+    </div>
+</nav>
+
+<section class="hero is-success">
+    <div class="hero-head">
+        <header class="navbar">
+            <div class="container has-text-centered">
+                <h1 class="title idHeader" style="width: 100%">Id: <span th:text="${playlistId}" id="idSpan"></span>
+                    <span id="copyMessage" style="display: none">Copied!</span>
+                </h1>
+            </div>
+        </header>
+    </div>
+
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <div id="player"></div>
+        </div>
+    </div>
+
+    <div class="hero-foot">
+        <nav class="tabs is-boxed is-fullwidth">
+            <div class="container has-text-centered">
+                <div class="columns">
+                    <div class="column is-4 is-offset-4">
+                        <div class="columns">
+                            <div class="column is-4">
+                                <button class="button is-link is-large is-rounded is-fullwidth" id="prevBtn">
+                                    <i class="fas fa-backward"></i>
+                                </button>
+                            </div>
+                            <div class="column is-4">
+                                <button class="button is-link is-large is-rounded is-fullwidth" id="togglePlayBtn">
+                                    <i class="fas fa-play"></i>
+                                    <i class="fas fa-pause" style="display: none"></i>
+                                    <i class="fas fa-spinner" style="display: none"></i>
+                                </button>
+                            </div>
+                            <div class="column is-4">
+                                <button class="button is-link is-large is-rounded is-fullwidth" id="nextBtn">
+                                    <i class="fas fa-forward"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2 class="title has-text-centered playlistTitle">Playlist</h2>
+        <div class="columns">
+            <div class="column is-6 is-offset-3">
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th>Title</th>
+                            <th>Delete</th>
+                            <th>Up</th>
+                            <th>Down</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playlistBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+        integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+        crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script src="/js/my.js"></script>
+
+</body>
+</html>
