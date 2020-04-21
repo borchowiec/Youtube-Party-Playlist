@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Youtube Party Playlist</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/playlist.css">
+</head>
+<body>
+
+<nav class="navbar is-link" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            Youtube Party Playlist
+        </a>
+    </div>
+</nav>
+
+<section class="hero is-link">
+    <div class="hero-head">
+        <header class="navbar">
+            <div class="container has-text-centered">
+                <h1 class="idHeader" style="width: 100%">Id: <span th:text="${playlistId}" id="idSpan"></span>
+                    <span id="copyMessage" style="display: none">Copied!</span>
+                </h1>
+            </div>
+        </header>
+    </div>
+
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title" id="currentTitle">Some title hehehehe</h1>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <h2 class="title has-text-centered playlistTitle">Playlist</h2>
+        <div class="columns">
+            <div class="column is-6 is-offset-3">
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th>Title</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playlistBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+        integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
+        crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/playlist.js"></script>
+
+</body>
+</html>
