@@ -23,4 +23,13 @@ public class PageController {
         model.addAttribute("playlistId", playlistId);
         return "my";
     }
+
+    /**
+     * @return Guest playlist page.
+     */
+    @GetMapping("/playlist/{playlistId}")
+    public String guestPlaylistPage(@PathVariable String playlistId, Model model) {
+        model.addAttribute("playlistId", playlistId);
+        return "playlist";
+    }
 }
