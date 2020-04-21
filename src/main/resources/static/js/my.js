@@ -1,5 +1,8 @@
 let player;
 
+/**
+ * Initialize youtube iframe
+ */
 function initYoutubeIframe() {
     const tag = document.createElement('script');
 
@@ -9,6 +12,9 @@ function initYoutubeIframe() {
     onYouTubeIframeAPIReady();
 }
 
+/**
+ * Set up player when iframe is ready.
+ */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '360',
@@ -20,6 +26,10 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
+/**
+ * Reacts on changing state of player.
+ * @param event Contains info about state of player.
+ */
 function onPlayerStateChange(event) {
     let icon = "";
     const state = event.data;
@@ -34,10 +44,14 @@ function onPlayerStateChange(event) {
         icon = "fa-spinner";
     }
 
+    // change toggle play button's icon
     $("#togglePlayBtn svg").hide();
     $(`#togglePlayBtn .${icon}`).show();
 }
 
+/**
+ * Pause or start player
+ */
 function togglePlay() {
     const state = player.getPlayerState();
     if (state === 0 || state === 2 || state === 5) {
@@ -48,6 +62,12 @@ function togglePlay() {
     }
 }
 
+/**
+ * Create element of playlist.
+ * @param index Index of element
+ * @param title Title of video
+ * @returns {jQuery|HTMLElement} tr
+ */
 function createPlaylistElement(index, title) {
     const tr = $("<tr></tr>");
 
@@ -65,6 +85,9 @@ function loadDummyPlaylist() {
     data.forEach((title, index) => $("#playlistBody").append(createPlaylistElement(index, title)));
 }
 
+/**
+ * Copies id of playlist to clipboard.
+ */
 function copyId() {
     const $temp = $("<input>");
     $("body").append($temp);

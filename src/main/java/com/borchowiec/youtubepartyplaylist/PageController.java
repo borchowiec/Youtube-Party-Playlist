@@ -16,7 +16,7 @@ public class PageController {
     }
 
     /**
-     * @return Index page.
+     * @return Page of user's playlist.
      */
     @GetMapping("/my/{playlistId}")
     public String myPlaylistPage(@PathVariable String playlistId, Model model) {
