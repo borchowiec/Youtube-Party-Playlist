@@ -20,6 +20,7 @@ $("#joinPlaylistBtn").on("click", () => {
         errorLabel.show();
     }
     else {
+        Cookies.set("username", nickname);
         $("#joinPlaylistBox").show();
     }
 })
@@ -48,5 +49,8 @@ $("#joinPlaylistBox .joinBtn").on("click", () => {
 })
 
 $(document).ready(function(){
-    // todo if there is jwt, fill nickname
+    const username = Cookies.get("username");
+    if (username) {
+        $(".nicknameInput").val(username);
+    }
 });

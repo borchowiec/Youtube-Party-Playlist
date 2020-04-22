@@ -29,7 +29,7 @@ function onError() {
 }
 
 function connectToPlaylist() {
-    username = "testUser"; // todo get user from cookie
+    username = Cookies.get("username");
     if (username) {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
