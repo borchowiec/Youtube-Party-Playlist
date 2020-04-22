@@ -10,6 +10,9 @@ function onMessageReceived(msgObj) {
     if (message.type === "JOIN") {
         addUserToTable(message.username, message.userType);
     }
+    else if (message.type === "LEAVE") {
+        removeUserFromTable(message.username);
+    }
     console.log(message);
 }
 

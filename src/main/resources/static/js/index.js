@@ -1,10 +1,15 @@
+function getUsername() {
+    return $(".nicknameInput").val().trim();
+}
+
 /**
  * Redirects to user's playlist.
  */
 $("#myPlaylistBtn").on("click", () => {
     // todo if there is no jwt, get new from backend
     // todo get id from jwt
-    const id = "123asdasdasd1231";
+    Cookies.set("username", getUsername());
+    const id = "xd";
     window.open(`/my/${id}`, "_self")
 })
 
@@ -13,7 +18,7 @@ $("#myPlaylistBtn").on("click", () => {
  */
 $("#joinPlaylistBtn").on("click", () => {
     // check if user gave nickname
-    const nickname = $(".nicknameInput").val().trim();
+    const nickname = getUsername();
     if (nickname.length === 0) {
         const errorLabel = $(".nickErrorMsg");
         errorLabel.text("You should type your nickname");

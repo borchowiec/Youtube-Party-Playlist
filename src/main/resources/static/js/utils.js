@@ -21,6 +21,7 @@ function showElement(cssQuery, time) {
 }
 
 function addUserToTable(username, userType) {
+    // todo  check by id if user exists
     const tr = $("<tr></tr>");
     tr.append(`<td><i class="fas fa-user"></i></td>`)
     tr.append(`<td>${username}</td>`)
@@ -33,4 +34,10 @@ function addUserToTable(username, userType) {
         tr.addClass("has-text-white");
         $("#usersBody").append(tr);
     }
+}
+
+function removeUserFromTable(username) { // todo remove by id
+    $("#usersBody tr").filter(function() {
+        return $(this).children("td").eq(1).text().trim() === username;
+    }).first().remove();
 }
