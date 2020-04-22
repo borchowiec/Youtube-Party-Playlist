@@ -18,19 +18,6 @@ function loadDummyPlaylist() {
     data.forEach((title, index) => $("#playlistBody").append(createPlaylistElement(index, title)));
 }
 
-/**
- * Copies id of playlist to clipboard.
- */
-function copyId() {
-    const $temp = $("<input>");
-    $("body").append($temp);
-    $temp.val($("#idSpan").text()).select();
-    document.execCommand("copy");
-    $temp.remove();
-    $("#copyMessage").show();
-    setTimeout(function() { $("#copyMessage").hide(); }, 3000);
-}
-
 $(document).ready(function() {
     $(".idHeader").on("click", () => {
         copyContentOfElementToClipboard("#idSpan");

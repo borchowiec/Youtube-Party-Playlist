@@ -19,3 +19,11 @@ function showElement(cssQuery, time) {
     $(cssQuery).show();
     setTimeout(function() { $("#copyMessage").hide(); }, time);
 }
+
+function addUserToTable(username) {
+    const tr = $("<tr></tr>");
+    tr.append(`<td><i class="fas fa-user"></i></td>`)
+    tr.append(`<td>${username}</td>`)
+
+    $("#usersBody").append(tr);
+}
