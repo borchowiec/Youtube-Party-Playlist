@@ -20,10 +20,17 @@ function showElement(cssQuery, time) {
     setTimeout(function() { $("#copyMessage").hide(); }, time);
 }
 
-function addUserToTable(username) {
+function addUserToTable(username, userType) {
     const tr = $("<tr></tr>");
     tr.append(`<td><i class="fas fa-user"></i></td>`)
     tr.append(`<td>${username}</td>`)
 
-    $("#usersBody").append(tr);
+    if (userType === "OWNER") {
+        tr.addClass("has-text-warning");
+        $("#usersBody").prepend(tr);
+    }
+    else {
+        tr.addClass("has-text-white");
+        $("#usersBody").append(tr);
+    }
 }

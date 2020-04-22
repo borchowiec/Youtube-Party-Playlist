@@ -1,5 +1,6 @@
 package com.borchowiec.youtubepartyplaylist.controller;
 
+import com.borchowiec.youtubepartyplaylist.model.JoinMessage;
 import com.borchowiec.youtubepartyplaylist.model.MessageType;
 import com.borchowiec.youtubepartyplaylist.model.PlaylistMessage;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,7 +22,7 @@ public class PlaylistController {
     }
 
     @MessageMapping("/playlist-ws/{roomId}/addUser")
-    public void addUser(@DestinationVariable String roomId, @Payload PlaylistMessage message,
+    public void addUser(@DestinationVariable String roomId, @Payload JoinMessage message,
                         SimpMessageHeaderAccessor headerAccessor) {
         String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
         if (currentRoomId != null) {

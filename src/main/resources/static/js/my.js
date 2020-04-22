@@ -86,6 +86,7 @@ function loadDummyPlaylist() {
 }
 
 $(document).ready(function() {
+    connectToPlaylist("OWNER");
     $("#togglePlayBtn").on("click", () => togglePlay());
     $("#prevBtn").on("click", () => console.log("previous")); // todo previous song
     $("#nextBtn").on("click", () => console.log("next")); // todo next song

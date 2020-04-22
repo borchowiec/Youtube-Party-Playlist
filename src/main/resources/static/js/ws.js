@@ -2,12 +2,13 @@ let stompClient;
 let username;
 let roomId;
 let topic;
+let userType;
 
 function onMessageReceived(msgObj) {
     const message = JSON.parse(msgObj.body);
 
     if (message.type === "JOIN") {
-        addUserToTable(message.username);
+        addUserToTable(message.username, message.userType);
     }
     console.log(message);
 }
@@ -20,7 +21,7 @@ function onConnected() {
 
     stompClient.send(`${topic}/addUser`,
         {},
-        JSON.stringify({username: username, type: 'JOIN'})
+        JSON.stringify({username: username, type: 'JOIN', userType: userType})
     );
 }
 
@@ -28,7 +29,8 @@ function onError() {
     // todo on error
 }
 
-function connectToPlaylist() {
+function connectToPlaylist(newUserType) {
+    userType = newUserType;
     username = Cookies.get("username");
     if (username) {
         const socket = new SockJS('/ws');
@@ -39,7 +41,3 @@ function connectToPlaylist() {
         window.open("/", "_self")
     }
 }
-
-$(document).ready(function() {
-    connectToPlaylist();
-});

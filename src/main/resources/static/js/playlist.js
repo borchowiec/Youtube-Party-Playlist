@@ -19,6 +19,7 @@ function loadDummyPlaylist() {
 }
 
 $(document).ready(function() {
+    connectToPlaylist("GUEST");
     $(".idHeader").on("click", () => {
         copyContentOfElementToClipboard("#idSpan");
         showElement("#copyMessage", 3000);
