@@ -64,7 +64,10 @@ function togglePlay() {
 }
 
 function addVideo(videoInfo) {
+    setPlaylistFromCookies();
+
     videos.push({id: videoInfo.id, title: videoInfo.snippet.title, thumbnail: videoInfo.snippet.thumbnails.standard});
+    Cookies.set("playlistContent", JSON.stringify(videos));
     refreshPlaylist();
 }
 
@@ -95,6 +98,18 @@ function createPlaylistElement(index, video) {
     return tr;
 }
 
+function setPlaylistFromCookies() {
+    let cookiePlaylist = Cookies.get("playlistContent");
+    let playlistContent = [];
+
+    if (cookiePlaylist !== undefined && cookiePlaylist !== null) {
+        playlistContent = JSON.parse(cookiePlaylist);
+    }
+
+    videos = playlistContent;
+    // todo send playlist
+}
+
 $(document).ready(function() {
     connectToPlaylist("OWNER");
     $("#togglePlayBtn").on("click", () => togglePlay());
@@ -104,5 +119,7 @@ $(document).ready(function() {
         copyContentOfElementToClipboard("#idSpan");
         showElement("#copyMessage", 3000);
     });
+    setPlaylistFromCookies();
+    refreshPlaylist();
     initYoutubeIframe();
 });
