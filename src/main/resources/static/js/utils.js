@@ -28,7 +28,14 @@ function showElement(cssQuery, time) {
  * @param userType if user is a owner, it will be decorated
  */
 function addUserToTable(username, userType) {
-    // todo  check by id if user already exists in table
+    // todo check by id if user already exists in table
+    let length = $("#usersBody tr").filter(function() {
+        return $(this).children("td").eq(1).text().trim() === username;
+    }).length;
+
+    // if user already exists in users table
+    if (length > 0) return;
+
     const tr = $("<tr></tr>");
     tr.append(`<td><i class="fas fa-user"></i></td>`)
     tr.append(`<td>${username}</td>`)

@@ -56,4 +56,14 @@ public class PlaylistController {
     public void updatePlaylist(@DestinationVariable String roomId, @Payload UpdatedPlaylistMessage message) {
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
     }
+
+    /**
+     * Sends new, updated playlist.
+     * @param roomId all users in this room will receive message
+     * @param message contains playlist
+     */
+    @MessageMapping("/playlist-ws/{roomId}/present")
+    public void presentUser(@DestinationVariable String roomId, @Payload PresentMessage message) {
+        messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
+    }
 }

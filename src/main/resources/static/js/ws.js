@@ -13,6 +13,14 @@ function onMessageReceived(msgObj) {
 
     if (message.type === "JOIN") { // add user to users table
         addUserToTable(message.username, message.userType);
+
+        if (userType === "OWNER") { // send updated playlist if new user join
+            sendUpdatedPlaylist(videos);
+        }
+        sendImPresent(); // because new user don't know who is present
+    }
+    else if (message.type === "PRESENT") {
+        addUserToTable(message.username, message.userType);
     }
     else if (message.type === "LEAVE") { // remove user from users table because user leaved
         removeUserFromTable(message.username);
@@ -80,5 +88,15 @@ function sendUpdatedPlaylist(playlist) {
     stompClient.send(`${topic}/updatePlaylist`,
         {},
         JSON.stringify({type: 'UPDATED_PLAYLIST', playlist: JSON.stringify(playlist)})
+    );
+}
+
+/**
+ * Notifies everyone that you are present
+ */
+function sendImPresent() {
+    stompClient.send(`${topic}/present`,
+        {},
+        JSON.stringify({type: 'PRESENT', username: username, userType: userType})
     );
 }
