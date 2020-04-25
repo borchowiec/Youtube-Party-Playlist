@@ -121,5 +121,21 @@ $(document).ready(function() {
     });
     setPlaylistFromCookies();
     refreshPlaylist();
+
+    function addVideoAsOwner(url) {
+        getInfoAboutVideo(url).then(videoInfo => {
+            if (videoInfo !== null) {
+                addVideo(videoInfo);
+            }
+        });
+        $("#urlInput").val("");
+    }
+
+    $("#urlInput").keypress((e) => {
+        if (e.which === 13) {
+            addVideoAsOwner($("#urlInput").val());
+        }
+    });
+    $("#sendUrlButton").on("click", () => addVideoAsOwner($("#urlInput").val()));
     initYoutubeIframe();
 });

@@ -14,7 +14,9 @@ function createPlaylistElement(index, title) {
 }
 
 function updatePlaylist(playlist) {
-    playlist.forEach((el, index) => $("#playlistBody").append(createPlaylistElement(index, el.title)));
+    const playlistBody = $("#playlistBody");
+    playlistBody.empty();
+    playlist.forEach((el, index) => playlistBody.append(createPlaylistElement(index, el.title)));
 }
 
 $(document).ready(function() {
