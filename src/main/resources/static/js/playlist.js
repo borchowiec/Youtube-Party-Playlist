@@ -42,3 +42,11 @@ $(document).ready(function() {
         $("#urlInput").val("");
     })
 });
+
+/**
+ * Sets label that displays current video's title.
+ * @param title Title of current video
+ */
+function setCurrentTitle(title) {
+    $("#currentTitle").text(title);
+}

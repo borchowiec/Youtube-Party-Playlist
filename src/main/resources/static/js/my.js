@@ -1,5 +1,6 @@
 let player;
 let videos = [];
+let currentVideo = 0;
 
 /**
  * Initialize youtube iframe
@@ -14,14 +15,25 @@ function initYoutubeIframe() {
 }
 
 /**
+ * It's called when player is ready.
+ */
+function onPlayerReady() {
+    // set up first video, if exists
+    if (videos.length > 0) {
+        currentVideo = 0;
+        setCurrentVideo();
+    }
+}
+
+/**
  * Set up player when iframe is ready.
  */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '360',
         width: '640',
-        videoId: 'M7lc1UVf-VE',
         events: {
+            'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
         }
     });
@@ -35,7 +47,14 @@ function onPlayerStateChange(event) {
     let icon = "";
     const state = event.data;
 
-    if (state === -1 || state === 0 || state === 2) {
+    if (state === 0) { // next song
+        icon = "fa-play";
+        if (videos.length > 0) {
+            currentVideo = (currentVideo + 1) % videos.length;
+            setCurrentVideo();
+        }
+    }
+    else if (state === -1 || state === 2) {
         icon = "fa-play";
     }
     else if (state === 1 || state === 5) {
@@ -75,6 +94,20 @@ function addVideo(videoInfo) {
     refreshPlaylist();
 
     sendUpdatedPlaylist(videos);
+
+    if (videos.length === 1) {
+        currentVideo = 0;
+        setCurrentVideo();
+    }
+}
+
+/**
+ * Sets current video. Song of index equal to currentVideo.
+ */
+function setCurrentVideo() {
+    player.loadVideoById(videos[currentVideo].id, 0, "large");
+    selectNthPlaylistElement(currentVideo);
+    sendCurrentVideo(currentVideo, videos[currentVideo]);
 }
 
 /**
