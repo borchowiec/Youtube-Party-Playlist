@@ -1,4 +1,4 @@
-package com.borchowiec.youtubepartyplaylist;
+package com.borchowiec.youtubepartyplaylist.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

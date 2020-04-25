@@ -39,9 +39,17 @@
 
 <section>
     <div class="container">
-        <h2 class="title has-text-centered playlistTitle">Playlist</h2>
         <div class="columns">
-            <div class="column is-6 is-offset-3">
+            <div class="column is-9">
+                <h2 class="title has-text-centered playlistTitle">Playlist</h2>
+                <div class="columns">
+                    <div class="column is-10">
+                        <input class="input is-info" type="text" placeholder="Paste url of YT video" id="urlInput">
+                    </div>
+                    <div class="column is-2">
+                        <button class="button is-info is-fullwidth" id="sendUrlButton">Send</button>
+                    </div>
+                </div>
                 <table class="table is-fullwidth">
                     <thead>
                         <tr>
@@ -52,15 +60,31 @@
                     <tbody id="playlistBody"></tbody>
                 </table>
             </div>
+
+            <div class="column is-3 has-background-info">
+                <h2 class="title has-text-centered playlistTitle">Users</h2>
+                <table class="table is-fullwidth">
+                    <tbody class="has-background-info" id="usersBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const playlistId = /*[[${playlistId}]]*/ 'default';
+    /*]]>*/
+</script>
 <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
         integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs="
         crossorigin="anonymous"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <script src="/js/utils.js"></script>
+<script src="/js/ws.js"></script>
 <script src="/js/playlist.js"></script>
 
 </body>

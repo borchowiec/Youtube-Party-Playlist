@@ -1,4 +1,5 @@
 let player;
+let videos = [];
 
 /**
  * Initialize youtube iframe
@@ -63,16 +64,41 @@ function togglePlay() {
 }
 
 /**
+ * Adds video to cookies and to page.
+ * @param videoInfo contains video's data
+ */
+function addVideo(videoInfo) {
+    setPlaylistFromCookies();
+
+    videos.push({id: videoInfo.id, title: videoInfo.snippet.title, thumbnail: videoInfo.snippet.thumbnails.standard});
+    Cookies.set("playlistContent", JSON.stringify(videos));
+    refreshPlaylist();
+
+    sendUpdatedPlaylist(videos);
+}
+
+/**
+ * Removes playlist from page and adds new.
+ */
+function refreshPlaylist() {
+    const playlistBody = $("#playlistBody");
+    playlistBody.empty();
+    videos.forEach((video, index) => playlistBody.append(createPlaylistElement(index, video)));
+}
+
+/**
  * Create element of playlist.
- * @param index Index of element
- * @param title Title of video
+ * @param index Index of element.
+ * @param video Object containing info about video.
  * @returns {jQuery|HTMLElement} tr
  */
-function createPlaylistElement(index, title) {
+function createPlaylistElement(index, video) {
     const tr = $("<tr></tr>");
 
-    tr.append(`<td>${index}</td>`)
-    tr.append(`<td>${title}</td>`)
+    // todo buttons delete up down
+    // todo thumbnail
+    tr.append(`<td>${index + 1}</td>`)
+    tr.append(`<td>${video.title}</td>`)
     tr.append(`<td><button class="button is-danger is-small"><i class="fas fa-trash"></i></button></td>`)
     tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-up"></i></button></td>`)
     tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-down"></i></button></td>`)
@@ -80,12 +106,22 @@ function createPlaylistElement(index, title) {
     return tr;
 }
 
-function loadDummyPlaylist() {
-    const data = ["Title 1", "Ale urwał", "2000 mix", "CATSSS", "MORE CATS", "dogo"];
-    data.forEach((title, index) => $("#playlistBody").append(createPlaylistElement(index, title)));
+/**
+ * Reads playlist from cookie and sets 'videos' variable
+ */
+function setPlaylistFromCookies() {
+    let cookiePlaylist = Cookies.get("playlistContent");
+    let playlistContent = [];
+
+    if (cookiePlaylist) {
+        playlistContent = JSON.parse(cookiePlaylist);
+    }
+
+    videos = playlistContent;
 }
 
 $(document).ready(function() {
+    connectToPlaylist("OWNER");
     $("#togglePlayBtn").on("click", () => togglePlay());
     $("#prevBtn").on("click", () => console.log("previous")); // todo previous song
     $("#nextBtn").on("click", () => console.log("next")); // todo next song
@@ -93,6 +129,24 @@ $(document).ready(function() {
         copyContentOfElementToClipboard("#idSpan");
         showElement("#copyMessage", 3000);
     });
-    loadDummyPlaylist(); // todo load real data
+    setPlaylistFromCookies();
+    refreshPlaylist();
+
+    // listener of url input
+    function addVideoAsOwner(url) {
+        getInfoAboutVideo(url).then(videoInfo => {
+            if (videoInfo !== null) {
+                addVideo(videoInfo);
+            }
+        });
+        $("#urlInput").val("");
+    }
+
+    $("#urlInput").keypress((e) => {
+        if (e.which === 13) {
+            addVideoAsOwner($("#urlInput").val());
+        }
+    });
+    $("#sendUrlButton").on("click", () => addVideoAsOwner($("#urlInput").val()));
     initYoutubeIframe();
 });
