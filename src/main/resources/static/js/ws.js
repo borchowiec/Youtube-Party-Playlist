@@ -13,7 +13,13 @@ function onMessageReceived(msgObj) {
     else if (message.type === "LEAVE") {
         removeUserFromTable(message.username);
     }
-    console.log(message);
+    else if (message.type === "ADD_VIDEO" && userType === "OWNER") {
+        getInfoAboutVideo(message.url).then(videoInfo => {
+            if (videoInfo !== null) {
+                addVideo(videoInfo);
+            }
+        });
+    }
 }
 
 function onConnected() {

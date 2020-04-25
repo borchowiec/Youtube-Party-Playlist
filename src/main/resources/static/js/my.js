@@ -1,4 +1,5 @@
 let player;
+let videos = [];
 
 /**
  * Initialize youtube iframe
@@ -62,27 +63,36 @@ function togglePlay() {
     }
 }
 
+function addVideo(videoInfo) {
+    videos.push({id: videoInfo.id, title: videoInfo.snippet.title, thumbnail: videoInfo.snippet.thumbnails.standard});
+    refreshPlaylist();
+}
+
+function refreshPlaylist() {
+    const playlistBody = $("#playlistBody");
+    playlistBody.empty();
+    videos.forEach((video, index) => playlistBody.append(createPlaylistElement(index, video)));
+    // todo send current playlist
+}
+
 /**
  * Create element of playlist.
- * @param index Index of element
- * @param title Title of video
+ * @param index Index of element.
+ * @param video Object containing info about video.
  * @returns {jQuery|HTMLElement} tr
  */
-function createPlaylistElement(index, title) {
+function createPlaylistElement(index, video) {
     const tr = $("<tr></tr>");
 
-    tr.append(`<td>${index}</td>`)
-    tr.append(`<td>${title}</td>`)
+    // todo buttons delete up down
+    // todo thumbnail
+    tr.append(`<td>${index + 1}</td>`)
+    tr.append(`<td>${video.title}</td>`)
     tr.append(`<td><button class="button is-danger is-small"><i class="fas fa-trash"></i></button></td>`)
     tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-up"></i></button></td>`)
     tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-down"></i></button></td>`)
 
     return tr;
-}
-
-function loadDummyPlaylist() {
-    const data = ["Title 1", "Ale urwał", "2000 mix", "CATSSS", "MORE CATS", "dogo"];
-    data.forEach((title, index) => $("#playlistBody").append(createPlaylistElement(index, title)));
 }
 
 $(document).ready(function() {
@@ -94,6 +104,5 @@ $(document).ready(function() {
         copyContentOfElementToClipboard("#idSpan");
         showElement("#copyMessage", 3000);
     });
-    loadDummyPlaylist(); // todo load real data
     initYoutubeIframe();
 });

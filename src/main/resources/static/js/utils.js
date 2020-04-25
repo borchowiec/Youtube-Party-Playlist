@@ -1,3 +1,5 @@
+const token = "AIzaSyDwW-mhoTot64j06Frtv-wGCnOsi7bvImc";
+
 /**
  * Copies text of element to user's clipboard.
  * @param cssQuery element containing data to copy.
@@ -40,4 +42,26 @@ function removeUserFromTable(username) { // todo remove by id
     $("#usersBody tr").filter(function() {
         return $(this).children("td").eq(1).text().trim() === username;
     }).first().remove();
+}
+
+function getInfoAboutVideo(stringUrl) {
+    const url = new URL(stringUrl);
+    const id = url.searchParams.get("v");
+
+    if (id === null) {
+        return null;
+    }
+    else {
+        const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&id=${id}&key=${token}`;
+        return axios.get(apiUrl)
+            .then((response) => {
+                if (response.data.pageInfo.totalResults < 1) {
+                    return null;
+                }
+                else {
+                    return response.data.items[0];
+                }
+            })
+            .catch((response) => {return null});
+    }
 }
