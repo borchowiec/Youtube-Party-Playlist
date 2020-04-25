@@ -1,5 +1,8 @@
 package com.borchowiec.youtubepartyplaylist.model;
 
+/**
+ * Contains url of video and user which sent this message.
+ */
 public class UrlMessage {
     private MessageType type;
     private String username;

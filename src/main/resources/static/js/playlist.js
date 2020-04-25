@@ -13,6 +13,10 @@ function createPlaylistElement(index, title) {
     return tr;
 }
 
+/**
+ * Removes playlist from page and adds new.
+ * @param playlist
+ */
 function updatePlaylist(playlist) {
     const playlistBody = $("#playlistBody");
     playlistBody.empty();
@@ -25,6 +29,8 @@ $(document).ready(function() {
         copyContentOfElementToClipboard("#idSpan");
         showElement("#copyMessage", 3000);
     });
+
+    // listeners for url input
     $("#urlInput").keypress((e) => {
         if (e.which === 13) {
             sendUrl($("#urlInput").val());

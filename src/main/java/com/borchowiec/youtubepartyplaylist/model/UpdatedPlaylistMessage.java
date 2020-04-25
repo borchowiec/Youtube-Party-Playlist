@@ -1,5 +1,8 @@
 package com.borchowiec.youtubepartyplaylist.model;
 
+/**
+ * Contains current state of playlist.
+ */
 public class UpdatedPlaylistMessage {
     private final MessageType type = MessageType.UPDATED_PLAYLIST;
     private String playlist;

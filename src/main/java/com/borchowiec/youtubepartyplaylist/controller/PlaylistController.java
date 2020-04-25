@@ -19,6 +19,12 @@ public class PlaylistController {
         this.messagingTemplate = messagingTemplate;
     }
 
+    /**
+     * Register user in room.
+     * @param roomId User will be register in this room.
+     * @param message Message that contains info about user.
+     * @param headerAccessor
+     */
     @MessageMapping("/playlist-ws/{roomId}/addUser")
     public void addUser(@DestinationVariable String roomId, @Payload JoinMessage message,
                         SimpMessageHeaderAccessor headerAccessor) {
@@ -31,11 +37,21 @@ public class PlaylistController {
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
     }
 
+    /**
+     * Adds video to specific playlist.
+     * @param roomId all users in this room will receive message
+     * @param message contains url of video.
+     */
     @MessageMapping("/playlist-ws/{roomId}/addVideo")
     public void addVideo(@DestinationVariable String roomId, @Payload UrlMessage message) {
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
     }
 
+    /**
+     * Sends new, updated playlist.
+     * @param roomId all users in this room will receive message
+     * @param message contains playlist
+     */
     @MessageMapping("/playlist-ws/{roomId}/updatePlaylist")
     public void updatePlaylist(@DestinationVariable String roomId, @Payload UpdatedPlaylistMessage message) {
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);

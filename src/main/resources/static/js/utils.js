@@ -22,8 +22,13 @@ function showElement(cssQuery, time) {
     setTimeout(function() { $("#copyMessage").hide(); }, time);
 }
 
+/**
+ * Adds user to table in page.
+ * @param username
+ * @param userType if user is a owner, it will be decorated
+ */
 function addUserToTable(username, userType) {
-    // todo  check by id if user exists
+    // todo  check by id if user already exists in table
     const tr = $("<tr></tr>");
     tr.append(`<td><i class="fas fa-user"></i></td>`)
     tr.append(`<td>${username}</td>`)
@@ -38,13 +43,23 @@ function addUserToTable(username, userType) {
     }
 }
 
+/**
+ * Removes user from table of users.
+ * @param username
+ */
 function removeUserFromTable(username) { // todo remove by id
     $("#usersBody tr").filter(function() {
         return $(this).children("td").eq(1).text().trim() === username;
     }).first().remove();
 }
 
+/**
+ * Returns data about youtube video by given url. If video doesn't exists, it returns null.
+ * @param stringUrl url of video
+ * @returns {null|Promise<T>}
+ */
 function getInfoAboutVideo(stringUrl) {
+    // taking id of video
     const url = new URL(stringUrl);
     const id = url.searchParams.get("v");
 

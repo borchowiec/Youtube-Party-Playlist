@@ -1,3 +1,6 @@
+/**
+ * @returns {string | jQuery} Username from nickname input.
+ */
 function getUsername() {
     return $(".nicknameInput").val().trim();
 }
@@ -54,6 +57,7 @@ $("#joinPlaylistBox .joinBtn").on("click", () => {
 })
 
 $(document).ready(function(){
+    // if cookies contains username, put it in nickname input
     const username = Cookies.get("username");
     if (username) {
         $(".nicknameInput").val(username);

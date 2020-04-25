@@ -63,6 +63,10 @@ function togglePlay() {
     }
 }
 
+/**
+ * Adds video to cookies and to page.
+ * @param videoInfo contains video's data
+ */
 function addVideo(videoInfo) {
     setPlaylistFromCookies();
 
@@ -73,6 +77,9 @@ function addVideo(videoInfo) {
     sendUpdatedPlaylist(videos);
 }
 
+/**
+ * Removes playlist from page and adds new.
+ */
 function refreshPlaylist() {
     const playlistBody = $("#playlistBody");
     playlistBody.empty();
@@ -99,11 +106,14 @@ function createPlaylistElement(index, video) {
     return tr;
 }
 
+/**
+ * Reads playlist from cookie and sets 'videos' variable
+ */
 function setPlaylistFromCookies() {
     let cookiePlaylist = Cookies.get("playlistContent");
     let playlistContent = [];
 
-    if (cookiePlaylist !== undefined && cookiePlaylist !== null) {
+    if (cookiePlaylist) {
         playlistContent = JSON.parse(cookiePlaylist);
     }
 
@@ -122,6 +132,7 @@ $(document).ready(function() {
     setPlaylistFromCookies();
     refreshPlaylist();
 
+    // listener of url input
     function addVideoAsOwner(url) {
         getInfoAboutVideo(url).then(videoInfo => {
             if (videoInfo !== null) {

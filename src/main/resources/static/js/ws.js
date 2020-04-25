@@ -4,27 +4,34 @@ let roomId;
 let topic;
 let userType;
 
+/**
+ * Receives messages and handles it in different ways depending on type of message.
+ * @param msgObj
+ */
 function onMessageReceived(msgObj) {
     const message = JSON.parse(msgObj.body);
 
-    if (message.type === "JOIN") {
+    if (message.type === "JOIN") { // add user to users table
         addUserToTable(message.username, message.userType);
     }
-    else if (message.type === "LEAVE") {
+    else if (message.type === "LEAVE") { // remove user from users table because user leaved
         removeUserFromTable(message.username);
     }
-    else if (message.type === "ADD_VIDEO" && userType === "OWNER") {
+    else if (message.type === "ADD_VIDEO" && userType === "OWNER") { // check if video is correct and add it to playlist
         getInfoAboutVideo(message.url).then(videoInfo => {
             if (videoInfo !== null) {
                 addVideo(videoInfo);
             }
         });
     }
-    else if (message.type === "UPDATED_PLAYLIST" && userType === "GUEST") {
+    else if (message.type === "UPDATED_PLAYLIST" && userType === "GUEST") { // receive updated playlist
         updatePlaylist(JSON.parse(message.playlist));
     }
 }
 
+/**
+ * Subscribe user to specified room. Room id should be given in url.
+ */
 function onConnected() {
     roomId = playlistId;
     topic = `/app/playlist-ws/${roomId}`;
@@ -54,6 +61,10 @@ function connectToPlaylist(newUserType) {
     }
 }
 
+/**
+ * Sends url of video to OWNER. OWNER will check video and decide if it's correct.
+ * @param url Video
+ */
 function sendUrl(url) {
     stompClient.send(`${topic}/addVideo`,
         {},
@@ -61,6 +72,10 @@ function sendUrl(url) {
     );
 }
 
+/**
+ * OWNER can send updated playlist to GUESTS.
+ * @param playlist
+ */
 function sendUpdatedPlaylist(playlist) {
     stompClient.send(`${topic}/updatePlaylist`,
         {},

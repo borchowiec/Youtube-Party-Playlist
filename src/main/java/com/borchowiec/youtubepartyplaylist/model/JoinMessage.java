@@ -1,5 +1,8 @@
 package com.borchowiec.youtubepartyplaylist.model;
 
+/**
+ * Contains info about user that joint room.
+ */
 public class JoinMessage {
     private final MessageType type = MessageType.JOIN;
     private String username;
