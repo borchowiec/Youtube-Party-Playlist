@@ -39,6 +39,7 @@ function onMessageReceived(msgObj) {
         updatePlaylist(JSON.parse(message.playlist));
     }
     else if (message.type === "CURRENT_VIDEO" && userType === "GUEST") { // receive info about current song
+        currentVideo = message.index;
         selectNthPlaylistElement(message.index);
         setCurrentTitle(JSON.parse(message.video).title);
     }

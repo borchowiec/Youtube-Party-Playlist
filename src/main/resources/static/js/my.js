@@ -99,15 +99,20 @@ function addVideo(videoInfo) {
         currentVideo = 0;
         setCurrentVideo();
     }
+    else {
+        selectNthPlaylistElement(currentVideo);
+    }
 }
 
 /**
  * Sets current video. Song of index equal to currentVideo.
  */
 function setCurrentVideo() {
-    player.loadVideoById(videos[currentVideo].id, 0, "large");
-    selectNthPlaylistElement(currentVideo);
-    sendCurrentVideo(currentVideo, videos[currentVideo]);
+    if (videos.length > 0) {
+        player.loadVideoById(videos[currentVideo].id, 0, "large");
+        selectNthPlaylistElement(currentVideo);
+        sendCurrentVideo(currentVideo, videos[currentVideo]);
+    }
 }
 
 /**
@@ -156,8 +161,14 @@ function setPlaylistFromCookies() {
 $(document).ready(function() {
     connectToPlaylist("OWNER");
     $("#togglePlayBtn").on("click", () => togglePlay());
-    $("#prevBtn").on("click", () => console.log("previous")); // todo previous song
-    $("#nextBtn").on("click", () => console.log("next")); // todo next song
+    $("#prevBtn").on("click", () => {
+        currentVideo = (currentVideo + videos.length - 1) % videos.length;
+        setCurrentVideo();
+    });
+    $("#nextBtn").on("click", () => {
+        currentVideo = (currentVideo + 1) % videos.length;
+        setCurrentVideo();
+    });
     $(".idHeader").on("click", () => {
         copyContentOfElementToClipboard("#idSpan");
         showElement("#copyMessage", 3000);
