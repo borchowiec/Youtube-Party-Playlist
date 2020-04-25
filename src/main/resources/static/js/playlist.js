@@ -24,5 +24,15 @@ $(document).ready(function() {
         copyContentOfElementToClipboard("#idSpan");
         showElement("#copyMessage", 3000);
     });
+    $("#urlInput").keypress((e) => {
+        if (e.which === 13) {
+            sendUrl($("#urlInput").val());
+            $("#urlInput").val("");
+        }
+    });
+    $("#sendUrlButton").on("click", () => {
+        sendUrl($("#urlInput").val());
+        $("#urlInput").val("");
+    })
     loadDummyPlaylist(); // todo load real data
 });

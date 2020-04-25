@@ -44,3 +44,10 @@ function connectToPlaylist(newUserType) {
         window.open("/", "_self")
     }
 }
+
+function sendUrl(url) {
+    stompClient.send(`${topic}/addVideo`,
+        {},
+        JSON.stringify({username: username, type: 'ADD_VIDEO', url: url})
+    );
+}
