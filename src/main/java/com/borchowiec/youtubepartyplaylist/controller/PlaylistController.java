@@ -1,9 +1,6 @@
 package com.borchowiec.youtubepartyplaylist.controller;
 
-import com.borchowiec.youtubepartyplaylist.model.JoinMessage;
-import com.borchowiec.youtubepartyplaylist.model.MessageType;
-import com.borchowiec.youtubepartyplaylist.model.PlaylistMessage;
-import com.borchowiec.youtubepartyplaylist.model.UrlMessage;
+import com.borchowiec.youtubepartyplaylist.model.*;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -36,6 +33,11 @@ public class PlaylistController {
 
     @MessageMapping("/playlist-ws/{roomId}/addVideo")
     public void addVideo(@DestinationVariable String roomId, @Payload UrlMessage message) {
+        messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
+    }
+
+    @MessageMapping("/playlist-ws/{roomId}/updatePlaylist")
+    public void updatePlaylist(@DestinationVariable String roomId, @Payload UpdatedPlaylistMessage message) {
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
     }
 }

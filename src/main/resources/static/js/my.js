@@ -69,13 +69,14 @@ function addVideo(videoInfo) {
     videos.push({id: videoInfo.id, title: videoInfo.snippet.title, thumbnail: videoInfo.snippet.thumbnails.standard});
     Cookies.set("playlistContent", JSON.stringify(videos));
     refreshPlaylist();
+
+    sendUpdatedPlaylist(videos);
 }
 
 function refreshPlaylist() {
     const playlistBody = $("#playlistBody");
     playlistBody.empty();
     videos.forEach((video, index) => playlistBody.append(createPlaylistElement(index, video)));
-    // todo send current playlist
 }
 
 /**
@@ -107,7 +108,6 @@ function setPlaylistFromCookies() {
     }
 
     videos = playlistContent;
-    // todo send playlist
 }
 
 $(document).ready(function() {

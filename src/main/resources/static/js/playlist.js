@@ -7,15 +7,14 @@
 function createPlaylistElement(index, title) {
     const tr = $("<tr></tr>");
 
-    tr.append(`<td>${index}</td>`)
+    tr.append(`<td>${index + 1}</td>`)
     tr.append(`<td>${title}</td>`)
 
     return tr;
 }
 
-function loadDummyPlaylist() {
-    const data = ["Title 1", "Ale urwał", "2000 mix", "CATSSS", "MORE CATS", "dogo"];
-    data.forEach((title, index) => $("#playlistBody").append(createPlaylistElement(index, title)));
+function updatePlaylist(playlist) {
+    playlist.forEach((el, index) => $("#playlistBody").append(createPlaylistElement(index, el.title)));
 }
 
 $(document).ready(function() {
@@ -34,5 +33,4 @@ $(document).ready(function() {
         sendUrl($("#urlInput").val());
         $("#urlInput").val("");
     })
-    loadDummyPlaylist(); // todo load real data
 });

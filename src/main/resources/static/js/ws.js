@@ -20,6 +20,9 @@ function onMessageReceived(msgObj) {
             }
         });
     }
+    else if (message.type === "UPDATED_PLAYLIST" && userType === "GUEST") {
+        updatePlaylist(JSON.parse(message.playlist));
+    }
 }
 
 function onConnected() {
@@ -55,5 +58,12 @@ function sendUrl(url) {
     stompClient.send(`${topic}/addVideo`,
         {},
         JSON.stringify({username: username, type: 'ADD_VIDEO', url: url})
+    );
+}
+
+function sendUpdatedPlaylist(playlist) {
+    stompClient.send(`${topic}/updatePlaylist`,
+        {},
+        JSON.stringify({type: 'UPDATED_PLAYLIST', playlist: JSON.stringify(playlist)})
     );
 }
