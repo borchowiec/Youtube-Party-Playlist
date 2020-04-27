@@ -201,6 +201,17 @@ function createPlaylistElement(index, video) {
     tr.append(`<td>${index + 1}</td>`);
     tr.append(`<td>${video.title}</td>`);
 
+    // play button
+    const playBtn = $('<button class="button is-link is-small"><i class="fas fa-play"></i></button>');
+    playBtn.on("click", () => {
+        currentVideo = index;
+        setCurrentVideo();
+        setCurrentVideo(currentVideo, videos[currentVideo]);
+    });
+    const playContainer = $('<td></td>');
+    playContainer.append(playBtn);
+    tr.append(playContainer);
+
     // delete button
     const deleteBtn = $('<button class="button is-danger is-small"><i class="fas fa-trash"></i></button>');
     deleteBtn.on("click", () => deleteVideo(index));
