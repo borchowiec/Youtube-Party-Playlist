@@ -87,3 +87,13 @@ function getInfoAboutVideo(stringUrl) {
             .catch((response) => {return null});
     }
 }
+
+/**
+ * Selects nth element of playlist.
+ * @param n
+ */
+function selectNthPlaylistElement(n) {
+    const tr = $("#playlistBody tr");
+    tr.removeAttr("class");
+    tr.eq(n).attr("class", "is-selected");
+}

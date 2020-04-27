@@ -16,6 +16,9 @@ function onMessageReceived(msgObj) {
 
         if (userType === "OWNER") { // send updated playlist if new user join
             sendUpdatedPlaylist(videos);
+            if (videos.length > 0) {
+                sendCurrentVideo(currentVideo, videos[currentVideo]);
+            }
         }
         sendImPresent(); // because new user don't know who is present
     }
@@ -34,6 +37,11 @@ function onMessageReceived(msgObj) {
     }
     else if (message.type === "UPDATED_PLAYLIST" && userType === "GUEST") { // receive updated playlist
         updatePlaylist(JSON.parse(message.playlist));
+    }
+    else if (message.type === "CURRENT_VIDEO" && userType === "GUEST") { // receive info about current song
+        currentVideo = message.index;
+        selectNthPlaylistElement(message.index);
+        setCurrentTitle(JSON.parse(message.video).title);
     }
 }
 
@@ -98,5 +106,17 @@ function sendImPresent() {
     stompClient.send(`${topic}/present`,
         {},
         JSON.stringify({type: 'PRESENT', username: username, userType: userType})
+    );
+}
+
+/**
+ * Sends info about current video
+ * @param index index of current video
+ * @param video object of video
+ */
+function sendCurrentVideo(index, video) {
+    stompClient.send(`${topic}/currentVideo`,
+        {},
+        JSON.stringify({type: 'CURRENT_VIDEO', index: index, video: JSON.stringify(video)})
     );
 }

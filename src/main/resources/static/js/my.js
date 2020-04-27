@@ -1,5 +1,6 @@
 let player;
 let videos = [];
+let currentVideo = 0;
 
 /**
  * Initialize youtube iframe
@@ -14,14 +15,25 @@ function initYoutubeIframe() {
 }
 
 /**
+ * It's called when player is ready.
+ */
+function onPlayerReady() {
+    // set up first video, if exists
+    if (videos.length > 0) {
+        currentVideo = 0;
+        setCurrentVideo();
+    }
+}
+
+/**
  * Set up player when iframe is ready.
  */
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '360',
         width: '640',
-        videoId: 'M7lc1UVf-VE',
         events: {
+            'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
         }
     });
@@ -35,7 +47,14 @@ function onPlayerStateChange(event) {
     let icon = "";
     const state = event.data;
 
-    if (state === -1 || state === 0 || state === 2) {
+    if (state === 0) { // next song
+        icon = "fa-play";
+        if (videos.length > 0) {
+            currentVideo = (currentVideo + 1) % videos.length;
+            setCurrentVideo();
+        }
+    }
+    else if (state === -1 || state === 2) {
         icon = "fa-play";
     }
     else if (state === 1 || state === 5) {
@@ -75,6 +94,25 @@ function addVideo(videoInfo) {
     refreshPlaylist();
 
     sendUpdatedPlaylist(videos);
+
+    if (videos.length === 1) {
+        currentVideo = 0;
+        setCurrentVideo();
+    }
+    else {
+        selectNthPlaylistElement(currentVideo);
+    }
+}
+
+/**
+ * Sets current video. Song of index equal to currentVideo.
+ */
+function setCurrentVideo() {
+    if (videos.length > 0) {
+        player.loadVideoById(videos[currentVideo].id, 0, "large");
+        selectNthPlaylistElement(currentVideo);
+        sendCurrentVideo(currentVideo, videos[currentVideo]);
+    }
 }
 
 /**
@@ -87,6 +125,69 @@ function refreshPlaylist() {
 }
 
 /**
+ * Removes video from playlist
+ * @param index index of removing video
+ */
+function deleteVideo(index) {
+    // if you deleting current video
+    if (currentVideo === index) {
+        // if deleting video is the last one
+        if (index === videos.length - 1) {
+            videos.pop();
+            currentVideo--;
+        }
+        else {
+            videos.splice(index, 1);
+        }
+        // run new video because current is removed
+        setCurrentVideo();
+    }
+    else if (index < currentVideo) {
+        // change index of current video
+        currentVideo--;
+        videos.splice(index, 1);
+        sendCurrentVideo(currentVideo, videos[currentVideo]);
+    }
+    else {
+        videos.splice(index, 1);
+    }
+
+    Cookies.set("playlistContent", JSON.stringify(videos));
+    refreshPlaylist();
+    selectNthPlaylistElement(currentVideo);
+    sendUpdatedPlaylist(videos);
+}
+
+/**
+ * Swaps position of two videos. If swapping video is current video, changes index of current video.
+ * @param indexA first video
+ * @param indexB second video
+ */
+function swapVideos(indexA, indexB) {
+    // swap elements
+    const temp = videos[indexA];
+    videos[indexA] = videos[indexB];
+    videos[indexB] = temp;
+
+    // refresh playlist
+    Cookies.set("playlistContent", JSON.stringify(videos));
+    refreshPlaylist();
+    sendUpdatedPlaylist(videos);
+
+    // check current
+    if (currentVideo === indexA) {
+        currentVideo = indexB;
+        sendCurrentVideo(currentVideo, videos[currentVideo]);
+    }
+    else if (currentVideo === indexB) {
+        currentVideo = indexA;
+        sendCurrentVideo(currentVideo, videos[currentVideo]);
+    }
+
+    selectNthPlaylistElement(currentVideo);
+}
+
+/**
  * Create element of playlist.
  * @param index Index of element.
  * @param video Object containing info about video.
@@ -95,13 +196,42 @@ function refreshPlaylist() {
 function createPlaylistElement(index, video) {
     const tr = $("<tr></tr>");
 
-    // todo buttons delete up down
     // todo thumbnail
-    tr.append(`<td>${index + 1}</td>`)
-    tr.append(`<td>${video.title}</td>`)
-    tr.append(`<td><button class="button is-danger is-small"><i class="fas fa-trash"></i></button></td>`)
-    tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-up"></i></button></td>`)
-    tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-down"></i></button></td>`)
+    // info
+    tr.append(`<td>${index + 1}</td>`);
+    tr.append(`<td>${video.title}</td>`);
+
+    // play button
+    const playBtn = $('<button class="button is-link is-small"><i class="fas fa-play"></i></button>');
+    playBtn.on("click", () => {
+        currentVideo = index;
+        setCurrentVideo();
+        setCurrentVideo(currentVideo, videos[currentVideo]);
+    });
+    const playContainer = $('<td></td>');
+    playContainer.append(playBtn);
+    tr.append(playContainer);
+
+    // delete button
+    const deleteBtn = $('<button class="button is-danger is-small"><i class="fas fa-trash"></i></button>');
+    deleteBtn.on("click", () => deleteVideo(index));
+    const deleteContainer = $('<td></td>');
+    deleteContainer.append(deleteBtn);
+    tr.append(deleteContainer);
+
+    // up button
+    const upBtn = $('<button class="button is-success is-small"><i class="fas fa-sort-up"></i></button>');
+    upBtn.on("click", () => swapVideos(index, (index + videos.length - 1) % videos.length));
+    const upContainer = $('<td></td>');
+    upContainer.append(upBtn);
+    tr.append(upContainer);
+
+    // up button
+    const downBtn = $('<button class="button is-success is-small"><i class="fas fa-sort-down"></i></button>');
+    downBtn.on("click", () => swapVideos(index, (index + 1) % videos.length));
+    const downContainer = $('<td></td>');
+    downContainer.append(downBtn);
+    tr.append(downContainer);
 
     return tr;
 }
@@ -123,8 +253,14 @@ function setPlaylistFromCookies() {
 $(document).ready(function() {
     connectToPlaylist("OWNER");
     $("#togglePlayBtn").on("click", () => togglePlay());
-    $("#prevBtn").on("click", () => console.log("previous")); // todo previous song
-    $("#nextBtn").on("click", () => console.log("next")); // todo next song
+    $("#prevBtn").on("click", () => {
+        currentVideo = (currentVideo + videos.length - 1) % videos.length;
+        setCurrentVideo();
+    });
+    $("#nextBtn").on("click", () => {
+        currentVideo = (currentVideo + 1) % videos.length;
+        setCurrentVideo();
+    });
     $(".idHeader").on("click", () => {
         copyContentOfElementToClipboard("#idSpan");
         showElement("#copyMessage", 3000);
@@ -148,5 +284,18 @@ $(document).ready(function() {
         }
     });
     $("#sendUrlButton").on("click", () => addVideoAsOwner($("#urlInput").val()));
+
+    const resetNotification = $("#resetNotification");
+    $("#resetBtn").on("click", () => resetNotification.show());
+    $("#resetNotification .delete").on("click", () => resetNotification.hide());
+    $("#resetNotification .no").on("click", () => resetNotification.hide());
+    $("#resetNotification .yes").on("click", () => {
+        videos = [];
+        Cookies.set("playlistContent", JSON.stringify(videos));
+        refreshPlaylist();
+        sendUpdatedPlaylist(videos);
+        player.stopVideo();
+        resetNotification.hide();
+    });
     initYoutubeIframe();
 });

@@ -80,11 +80,13 @@
                         <button class="button is-success is-fullwidth" id="sendUrlButton">Send</button>
                     </div>
                 </div>
+                <button class="button is-danger" id="resetBtn">Reset playlist</button>
                 <table class="table is-fullwidth">
                     <thead>
                         <tr>
                             <th>Pos</th>
                             <th>Title</th>
+                            <th>Play</th>
                             <th>Delete</th>
                             <th>Up</th>
                             <th>Down</th>
@@ -103,6 +105,13 @@
         </div>
     </div>
 </section>
+
+<div class="notification is-warning" id="resetNotification">
+    <button class="delete"></button>
+    <h1 class="has-text-centered">Are you sure you want to reset this playlist?</h1>
+    <button class="button is-link is-danger is-fullwidth yes">YES</button>
+    <button class="button is-link is-success is-fullwidth no">NO</button>
+</div>
 
 <script th:inline="javascript">
     /*<![CDATA[*/

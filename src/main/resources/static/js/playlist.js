@@ -1,3 +1,5 @@
+let currentVideo = 0;
+
 /**
  * Create element of playlist.
  * @param index Index of element
@@ -21,6 +23,7 @@ function updatePlaylist(playlist) {
     const playlistBody = $("#playlistBody");
     playlistBody.empty();
     playlist.forEach((el, index) => playlistBody.append(createPlaylistElement(index, el.title)));
+    selectNthPlaylistElement(currentVideo);
 }
 
 $(document).ready(function() {
@@ -42,3 +45,11 @@ $(document).ready(function() {
         $("#urlInput").val("");
     })
 });
+
+/**
+ * Sets label that displays current video's title.
+ * @param title Title of current video
+ */
+function setCurrentTitle(title) {
+    $("#currentTitle").text(title);
+}
