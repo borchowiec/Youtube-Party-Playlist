@@ -124,6 +124,10 @@ function refreshPlaylist() {
     videos.forEach((video, index) => playlistBody.append(createPlaylistElement(index, video)));
 }
 
+/**
+ * Removes video from playlist
+ * @param index index of removing video
+ */
 function deleteVideo(index) {
     // if you deleting current video
     if (currentVideo === index) {
@@ -142,7 +146,7 @@ function deleteVideo(index) {
         // change index of current video
         currentVideo--;
         videos.splice(index, 1);
-        sendCurrentVideo(currentVideo, videos[currentVideo])
+        sendCurrentVideo(currentVideo, videos[currentVideo]);
     }
     else {
         videos.splice(index, 1);
@@ -152,7 +156,35 @@ function deleteVideo(index) {
     refreshPlaylist();
     selectNthPlaylistElement(currentVideo);
     sendUpdatedPlaylist(videos);
-    // todo rozkminić scenariusze co może pójść nie tak
+}
+
+/**
+ * Swaps position of two videos. If swapping video is current video, changes index of current video.
+ * @param indexA first video
+ * @param indexB second video
+ */
+function swapVideos(indexA, indexB) {
+    // swap elements
+    const temp = videos[indexA];
+    videos[indexA] = videos[indexB];
+    videos[indexB] = temp;
+
+    // refresh playlist
+    Cookies.set("playlistContent", JSON.stringify(videos));
+    refreshPlaylist();
+    sendUpdatedPlaylist(videos);
+
+    // check current
+    if (currentVideo === indexA) {
+        currentVideo = indexB;
+        sendCurrentVideo(currentVideo, videos[currentVideo]);
+    }
+    else if (currentVideo === indexB) {
+        currentVideo = indexA;
+        sendCurrentVideo(currentVideo, videos[currentVideo]);
+    }
+
+    selectNthPlaylistElement(currentVideo);
 }
 
 /**
@@ -164,19 +196,31 @@ function deleteVideo(index) {
 function createPlaylistElement(index, video) {
     const tr = $("<tr></tr>");
 
-    // todo buttons up down
     // todo thumbnail
+    // info
     tr.append(`<td>${index + 1}</td>`);
     tr.append(`<td>${video.title}</td>`);
 
+    // delete button
     const deleteBtn = $('<button class="button is-danger is-small"><i class="fas fa-trash"></i></button>');
     deleteBtn.on("click", () => deleteVideo(index));
     const deleteContainer = $('<td></td>');
     deleteContainer.append(deleteBtn);
     tr.append(deleteContainer);
 
-    tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-up"></i></button></td>`)
-    tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-down"></i></button></td>`)
+    // up button
+    const upBtn = $('<button class="button is-success is-small"><i class="fas fa-sort-up"></i></button>');
+    upBtn.on("click", () => swapVideos(index, (index + videos.length - 1) % videos.length));
+    const upContainer = $('<td></td>');
+    upContainer.append(upBtn);
+    tr.append(upContainer);
+
+    // up button
+    const downBtn = $('<button class="button is-success is-small"><i class="fas fa-sort-down"></i></button>');
+    downBtn.on("click", () => swapVideos(index, (index + 1) % videos.length));
+    const downContainer = $('<td></td>');
+    downContainer.append(downBtn);
+    tr.append(downContainer);
 
     return tr;
 }
