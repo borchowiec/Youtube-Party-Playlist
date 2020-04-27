@@ -124,6 +124,37 @@ function refreshPlaylist() {
     videos.forEach((video, index) => playlistBody.append(createPlaylistElement(index, video)));
 }
 
+function deleteVideo(index) {
+    // if you deleting current video
+    if (currentVideo === index) {
+        // if deleting video is the last one
+        if (index === videos.length - 1) {
+            videos.pop();
+            currentVideo--;
+        }
+        else {
+            videos.splice(index, 1);
+        }
+        // run new video because current is removed
+        setCurrentVideo();
+    }
+    else if (index < currentVideo) {
+        // change index of current video
+        currentVideo--;
+        videos.splice(index, 1);
+        sendCurrentVideo(currentVideo, videos[currentVideo])
+    }
+    else {
+        videos.splice(index, 1);
+    }
+
+    Cookies.set("playlistContent", JSON.stringify(videos));
+    refreshPlaylist();
+    selectNthPlaylistElement(currentVideo);
+    sendUpdatedPlaylist(videos);
+    // todo rozkminić scenariusze co może pójść nie tak
+}
+
 /**
  * Create element of playlist.
  * @param index Index of element.
@@ -133,11 +164,17 @@ function refreshPlaylist() {
 function createPlaylistElement(index, video) {
     const tr = $("<tr></tr>");
 
-    // todo buttons delete up down
+    // todo buttons up down
     // todo thumbnail
-    tr.append(`<td>${index + 1}</td>`)
-    tr.append(`<td>${video.title}</td>`)
-    tr.append(`<td><button class="button is-danger is-small"><i class="fas fa-trash"></i></button></td>`)
+    tr.append(`<td>${index + 1}</td>`);
+    tr.append(`<td>${video.title}</td>`);
+
+    const deleteBtn = $('<button class="button is-danger is-small"><i class="fas fa-trash"></i></button>');
+    deleteBtn.on("click", () => deleteVideo(index));
+    const deleteContainer = $('<td></td>');
+    deleteContainer.append(deleteBtn);
+    tr.append(deleteContainer);
+
     tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-up"></i></button></td>`)
     tr.append(`<td><button class="button is-success is-small"><i class="fas fa-sort-down"></i></button></td>`)
 
