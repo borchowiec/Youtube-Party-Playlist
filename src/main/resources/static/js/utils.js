@@ -1,4 +1,4 @@
-const token = "AIzaSyDwW-mhoTot64j06Frtv-wGCnOsi7bvImc";
+const token = "AIzaSyCWG8H5xBCgdtvuL4chCj2k2NchGHrMt4U";
 
 /**
  * Copies text of element to user's clipboard.
@@ -86,42 +86,6 @@ function getInfoAboutVideo(stringUrl) {
             })
             .catch((response) => {return null});
     }
-}
-
-function findVideosOnYoutube(phrase, pages) {
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${phrase}&key=${token}&type=video`;
-    return axios.get(apiUrl)
-        .then((response) => {
-            let result = response.data.items;
-
-            if (response.data.nextPageToken && pages > 1) {
-                return getNextPage(phrase, response.data.nextPageToken, pages - 1).then(items => {
-                    return result.concat(items);
-                });
-            }
-            else {
-                return result;
-            }
-        })
-        .catch((response) => {return null});
-}
-
-function getNextPage(phrase, pageToken, page) {
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${phrase}&key=${token}&type=video&pageToken=${pageToken}`;
-    return axios.get(apiUrl)
-        .then((response) => {
-            let result = response.data.items;
-
-            if (response.data.nextPageToken && page > 1) {
-                return getNextPage(phrase, response.data.nextPageToken, page - 1).then(items => {
-                    return result.concat(items);
-                });
-            }
-            else {
-                return result;
-            }
-        })
-        .catch((response) => {return []});
 }
 
 /**
