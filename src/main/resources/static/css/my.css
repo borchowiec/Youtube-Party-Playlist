@@ -9,6 +9,17 @@
     animation-timing-function: step-start;
 }
 
+#resetNotification {
+    position: fixed;
+    width: 300px;
+    height: 180px;
+    top: 50%;
+    left: 50%;
+    margin-top: -90px;
+    margin-left: -150px;
+    display: none;
+}
+
 @keyframes spinner {
     0%   {transform: rotate(0deg);}
     11%  {transform: rotate(40deg);}

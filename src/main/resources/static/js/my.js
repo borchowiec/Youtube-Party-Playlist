@@ -273,5 +273,18 @@ $(document).ready(function() {
         }
     });
     $("#sendUrlButton").on("click", () => addVideoAsOwner($("#urlInput").val()));
+
+    const resetNotification = $("#resetNotification");
+    $("#resetBtn").on("click", () => resetNotification.show());
+    $("#resetNotification .delete").on("click", () => resetNotification.hide());
+    $("#resetNotification .no").on("click", () => resetNotification.hide());
+    $("#resetNotification .yes").on("click", () => {
+        videos = [];
+        Cookies.set("playlistContent", JSON.stringify(videos));
+        refreshPlaylist();
+        sendUpdatedPlaylist(videos);
+        player.stopVideo();
+        resetNotification.hide();
+    });
     initYoutubeIframe();
 });

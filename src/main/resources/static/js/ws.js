@@ -109,6 +109,11 @@ function sendImPresent() {
     );
 }
 
+/**
+ * Sends info about current video
+ * @param index index of current video
+ * @param video object of video
+ */
 function sendCurrentVideo(index, video) {
     stompClient.send(`${topic}/currentVideo`,
         {},
