@@ -16,7 +16,7 @@ const html = `
 `;
 
 function createSearchResultElement(video) {
-    return `
+    const htmlElement = `
     <div class="searchResult columns">
         <div class="column is-narrow thumbnail has-text-centered">
             <img src="${video.snippet.thumbnails.medium.url}" alt="thumbnail"/>
@@ -31,6 +31,18 @@ function createSearchResultElement(video) {
         </div>
     </div>
     `;
+    const result = $(htmlElement);
+    result.find("button").on("click", () => {
+        if (userType === "OWNER") {
+            addVideo(video);
+        }
+        else {
+            sendUrl(`https://www.youtube.com/watch?v=${video.id.videoId}`)
+        }
+        $("#phraseInput").val("");
+        $(".searchResults").empty();
+    });
+    return result;
 }
 
 function find() {
@@ -55,7 +67,7 @@ function find() {
 }
 
 function findVideosOnYoutube(phrase, pages) {
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${phrase}&key=${token}&type=video`;
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=id%2C+snippet&q=${phrase}&key=${token}&type=video`;
     return axios.get(apiUrl)
         .then((response) => {
             let result = response.data.items;
@@ -73,7 +85,7 @@ function findVideosOnYoutube(phrase, pages) {
 }
 
 function getNextPage(phrase, pageToken, page) {
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${phrase}&key=${token}&type=video&pageToken=${pageToken}`;
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=id%2C+snippet&q=${phrase}&key=${token}&type=video&pageToken=${pageToken}`;
     return axios.get(apiUrl)
         .then((response) => {
             let result = response.data.items;
