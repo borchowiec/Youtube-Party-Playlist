@@ -196,10 +196,11 @@ function swapVideos(indexA, indexB) {
 function createPlaylistElement(index, video) {
     const tr = $("<tr></tr>");
 
-    // todo thumbnail
     // info
     tr.append(`<td>${index + 1}</td>`);
     tr.append(`<td>${video.title}</td>`);
+    const buttons = $('<td></td>');
+    const buttonsContainer = $('<div class="columns"></div>');
 
     // play button
     const playBtn = $('<button class="button is-link is-small"><i class="fas fa-play"></i></button>');
@@ -208,30 +209,33 @@ function createPlaylistElement(index, video) {
         setCurrentVideo();
         setCurrentVideo(currentVideo, videos[currentVideo]);
     });
-    const playContainer = $('<td></td>');
+    const playContainer = $('<div class="column"></div>');
     playContainer.append(playBtn);
-    tr.append(playContainer);
+    buttonsContainer.append(playContainer);
 
     // delete button
     const deleteBtn = $('<button class="button is-danger is-small"><i class="fas fa-trash"></i></button>');
     deleteBtn.on("click", () => deleteVideo(index));
-    const deleteContainer = $('<td></td>');
+    const deleteContainer = $('<div class="column"></div>');
     deleteContainer.append(deleteBtn);
-    tr.append(deleteContainer);
+    buttonsContainer.append(deleteContainer);
 
     // up button
     const upBtn = $('<button class="button is-success is-small"><i class="fas fa-sort-up"></i></button>');
     upBtn.on("click", () => swapVideos(index, (index + videos.length - 1) % videos.length));
-    const upContainer = $('<td></td>');
+    const upContainer = $('<div class="column"></div>');
     upContainer.append(upBtn);
-    tr.append(upContainer);
+    buttonsContainer.append(upContainer);
 
     // up button
     const downBtn = $('<button class="button is-success is-small"><i class="fas fa-sort-down"></i></button>');
     downBtn.on("click", () => swapVideos(index, (index + 1) % videos.length));
-    const downContainer = $('<td></td>');
+    const downContainer = $('<div class="column"></div>');
     downContainer.append(downBtn);
-    tr.append(downContainer);
+    buttonsContainer.append(downContainer);
+
+    buttons.append(buttonsContainer);
+    tr.append(buttons);
 
     return tr;
 }

@@ -5,7 +5,7 @@
 const html = `
 <div class="container">
     <h2 class="has-text-grey-lighter title has-text-centered playlistTitle">Find video on YouTube</h2>
-    <div class="columns">
+    <div class="columns is-gapless">
         <div class="column is-10">
             <input class="input is-danger" type="text" placeholder="Find" id="phraseInput">
         </div>
@@ -26,17 +26,17 @@ const html = `
  */
 function createSearchResultElement(video) {
     const htmlElement = `
-    <div class="searchResult columns">
+    <div class="searchResult columns is-gapless">
         <div class="column is-narrow thumbnail has-text-centered">
             <img src="${video.snippet.thumbnails.medium.url}" alt="thumbnail"/>
         </div>
         <div class="column details">
-            <h1 class="is-size-3">${video.snippet.title}</h1>
-            <h3 class="is-size-6 has-text-grey is-italic">${video.snippet.channelTitle}</h3>
-            <p class="is-size-6 has-text-grey">${video.snippet.description}</p>
+            <h1 class="is-size-6-mobile is-size-3-tablet">${video.snippet.title}</h1>
+            <h3 class="is-size-7-mobile has-text-grey is-italic">${video.snippet.channelTitle}</h3>
+            <p class="is-size-7-mobile is-size-6-tablet has-text-grey">${video.snippet.description}</p>
         </div>
-        <div class="column is-narrow plus has-text-centered">
-            <button class="button is-large is-fullwidth is-danger"><i class="fas fa-plus"></i></button>
+        <div class="column is-narrow" style="text-align: center">
+            <button class="button is-large is-danger"><i class="fas fa-plus"></i></button>
         </div>
     </div>
     `;
