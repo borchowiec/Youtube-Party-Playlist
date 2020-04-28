@@ -1,5 +1,3 @@
-const token = "AIzaSyDwW-mhoTot64j06Frtv-wGCnOsi7bvImc";
-
 /**
  * Copies text of element to user's clipboard.
  * @param cssQuery element containing data to copy.

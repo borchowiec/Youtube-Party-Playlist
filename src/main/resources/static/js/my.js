@@ -89,7 +89,7 @@ function togglePlay() {
 function addVideo(videoInfo) {
     setPlaylistFromCookies();
 
-    videos.push({id: videoInfo.id, title: videoInfo.snippet.title, thumbnail: videoInfo.snippet.thumbnails.standard});
+    videos.push({id: videoInfo.id, title: videoInfo.snippet.title});
     Cookies.set("playlistContent", JSON.stringify(videos));
     refreshPlaylist();
 
