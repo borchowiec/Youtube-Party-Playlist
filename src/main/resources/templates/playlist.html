@@ -73,9 +73,10 @@
     </div>
 </section>
 
-<script th:inline="javascript">
+<script th:inline="javascript" class="tempScript">
     /*<![CDATA[*/
-    const playlistId = /*[[${playlistId}]]*/ 'default';
+    const tempPlaylistId = /*[[${playlistId}]]*/ 'default';
+    const tempToken = /*[[${token}]]*/ 'default';
     /*]]>*/
 </script>
 <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
@@ -86,6 +87,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/data.js"></script>
 <script src="/js/utils.js"></script>
 <script src="/js/ws.js"></script>
 <script src="/js/playlist.js"></script>

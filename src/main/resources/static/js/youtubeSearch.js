@@ -1,3 +1,7 @@
+/**
+ * Basic template of youtube search section.
+ * @type {string}
+ */
 const html = `
 <div class="container">
     <h2 class="has-text-grey-lighter title has-text-centered playlistTitle">Find video on YouTube</h2>
@@ -15,6 +19,11 @@ const html = `
 </div>
 `;
 
+/**
+ * Creates element that represents one founded video.
+ * @param video contains info about video
+ * @returns {jQuery|HTMLElement}
+ */
 function createSearchResultElement(video) {
     const htmlElement = `
     <div class="searchResult columns">
@@ -45,6 +54,9 @@ function createSearchResultElement(video) {
     return result;
 }
 
+/**
+ * Gets phrase from input and searches videos by this phrase.
+ */
 function find() {
     const phrase = $("#phraseInput").val().trim();
     // check if user typed anything
@@ -66,6 +78,12 @@ function find() {
     }
 }
 
+/**
+ * Calls api that searches videos by phrase. Will be return specific amount of pages or less.
+ * @param phrase
+ * @param pages
+ * @returns {Promise<T>}
+ */
 function findVideosOnYoutube(phrase, pages) {
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=id%2C+snippet&q=${phrase}&key=${token}&type=video`;
     return axios.get(apiUrl)
@@ -84,6 +102,13 @@ function findVideosOnYoutube(phrase, pages) {
         .catch((response) => {return null});
 }
 
+/**
+ * Searches videos on youtube by phrase. You can specify page. Will be return specific amount of pages or less.
+ * @param phrase
+ * @param pageToken
+ * @param page
+ * @returns {Promise<T | *[]>}
+ */
 function getNextPage(phrase, pageToken, page) {
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=id%2C+snippet&q=${phrase}&key=${token}&type=video&pageToken=${pageToken}`;
     return axios.get(apiUrl)
