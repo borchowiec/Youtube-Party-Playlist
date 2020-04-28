@@ -16,9 +16,16 @@
 
 .searchResult .thumbnail img {
     max-width: 200px;
+    padding-right: 5px;
 }
 
 .searchResult .plus button {
     max-width: 200px;
     height: 100%;
+}
+
+.searchResult {
+    border-width: 0 0 1px 0;
+    border-color: gray;
+    border-style: solid;
 }

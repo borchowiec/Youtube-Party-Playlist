@@ -32,3 +32,7 @@
     88%  {transform: rotate(320deg);}
     100% {transform: rotate(360deg);}
 }
+
+#player {
+    width: 100% !important;
+}
