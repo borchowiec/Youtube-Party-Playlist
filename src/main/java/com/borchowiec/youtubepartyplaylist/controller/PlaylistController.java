@@ -7,7 +7,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
 
 import static java.lang.String.format;
 
@@ -31,8 +30,9 @@ public class PlaylistController {
                         SimpMessageHeaderAccessor headerAccessor) {
         String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
         if (currentRoomId != null) {
-            PlaylistMessage leaveMessage = new PlaylistMessage(MessageType.LEAVE, message.getUsername());
-            messagingTemplate.convertAndSend(format("/room/%s", currentRoomId), leaveMessage);
+            LeaveMessage leaveMessage = new LeaveMessage();
+            message.setUserId(message.getUserId());
+            messagingTemplate.convertAndSend(format("/room/%s", roomId), leaveMessage);
         }
         headerAccessor.getSessionAttributes().put("userId", message.getUserId());
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);

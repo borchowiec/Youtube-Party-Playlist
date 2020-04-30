@@ -20,6 +20,9 @@ public class JwtTokenProvider {
     @Value("${jwtExpirationInMs}")
     private int jwtExpirationInMs;
 
+    /**
+     * @return New jwt token with unique id.
+     */
     public String generateToken() {
         String uniqueID = UUID.randomUUID().toString();
 
@@ -34,6 +37,10 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    /**
+     * @param token contains user id.
+     * @return User id contained in token.
+     */
     public String getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -43,6 +50,11 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
+    /**
+     * Validates given token.
+     * @param authToken Token that will be checked.
+     * @return True when token is valid.
+     */
     public boolean validateToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);

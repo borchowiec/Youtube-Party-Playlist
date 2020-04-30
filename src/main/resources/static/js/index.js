@@ -11,6 +11,7 @@ function getUsername() {
 $("#myPlaylistBtn").on("click", () => {
     Cookies.set("username", getUsername());
 
+    // get user id and go to user's playlist
     axios.get("/user/get-id")
         .then((response) => {
             const id = response.data.userId;
@@ -22,7 +23,7 @@ $("#myPlaylistBtn").on("click", () => {
 })
 
 /**
- * Open box where you can specify, which playlist you want to join.
+ * Display box where you can specify, which playlist you want to join.
  */
 $("#joinPlaylistBtn").on("click", () => {
     // check if user gave nickname

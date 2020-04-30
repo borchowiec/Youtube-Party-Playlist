@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+/**
+ * Checks if user has jwt token and if this token is valid. If not, it generates new one.
+ */
 @Component
 @Order(0)
 public class JwtTokenFilter implements Filter {

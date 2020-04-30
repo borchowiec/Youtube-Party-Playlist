@@ -7,6 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfiguration {
+
+    /**
+     * Registers a filter that checks if the user has a valid token.
+     */
     @Bean
     public FilterRegistrationBean<JwtTokenFilter> jwtTokenFilterRegistrationBean(){
         FilterRegistrationBean<JwtTokenFilter> registrationBean = new FilterRegistrationBean<>();

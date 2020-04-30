@@ -29,6 +29,10 @@ public class PageController {
     }
 
     /**
+     * @param playlistId id of user's playlist
+     * @param model contains playlistId and google token
+     * @param token google api token
+     * @param userToken jwt user token
      * @return Page of user's playlist.
      */
     @GetMapping("/my/{playlistId}")
@@ -45,12 +49,16 @@ public class PageController {
     }
 
     /**
+     * @param playlistId Id of playlist that user wants to join.
+     * @param model contains google api token
+     * @param token google api token
      * @return Guest playlist page.
      */
     @GetMapping("/playlist/{playlistId}")
-    public String guestPlaylistPage(@PathVariable String playlistId, Model model) {
+    public String guestPlaylistPage(@PathVariable String playlistId, Model model,
+                                    @Value("${googleToken}") String token) {
         model.addAttribute("playlistId", playlistId);
-        model.addAttribute("token", "AIzaSyCWG8H5xBCgdtvuL4chCj2k2NchGHrMt4U");
+        model.addAttribute("token", token);
         return "playlist";
     }
 }
