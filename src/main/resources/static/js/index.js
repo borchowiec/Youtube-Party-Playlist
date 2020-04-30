@@ -9,11 +9,16 @@ function getUsername() {
  * Redirects to user's playlist.
  */
 $("#myPlaylistBtn").on("click", () => {
-    // todo if there is no jwt, get new from backend
-    // todo get id from jwt
     Cookies.set("username", getUsername());
-    const id = "xd";
-    window.open(`/my/${id}`, "_self")
+
+    return axios.get("/user/get-id")
+        .then((response) => {
+            const id = response.data.userId;
+            window.open(`/my/${id}`, "_self")
+        })
+        .catch((error) => {
+            console.log(error)
+        });
 })
 
 /**

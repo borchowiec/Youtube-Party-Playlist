@@ -26,11 +26,16 @@ public class JwtTokenFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
 
         // get current token
-        String token = Stream.of(req.getCookies())
-                .filter(cookie -> cookie.getName().equals("userToken"))
-                .findFirst()
-                .orElse(new Cookie("userToken", ""))
-                .getValue();
+        Cookie[] cookies = req.getCookies();
+        String token = "";
+
+        if (cookies != null) {
+            token = Stream.of(cookies)
+                    .filter(cookie -> cookie.getName().equals("userToken"))
+                    .findFirst()
+                    .orElse(new Cookie("userToken", ""))
+                    .getValue();
+        }
 
         // check token and if it's not correct, generate new
         if (!StringUtils.hasText(token) || !tokenProvider.validateToken(token)) {

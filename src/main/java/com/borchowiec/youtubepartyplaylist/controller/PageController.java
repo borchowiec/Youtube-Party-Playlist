@@ -1,9 +1,10 @@
 package com.borchowiec.youtubepartyplaylist.controller;
 
+import com.borchowiec.youtubepartyplaylist.exception.NotOwnerException;
+import com.borchowiec.youtubepartyplaylist.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @Controller
 public class PageController {
+    private final JwtTokenProvider tokenProvider;
+
+    public PageController(JwtTokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
+
     /**
      * @return Index page.
      */
@@ -25,7 +32,13 @@ public class PageController {
      * @return Page of user's playlist.
      */
     @GetMapping("/my/{playlistId}")
-    public String myPlaylistPage(@PathVariable String playlistId, Model model, @Value("${googleToken}") String token) {
+    public String myPlaylistPage(@PathVariable String playlistId, Model model, @Value("${googleToken}") String token,
+                                 @CookieValue(name = "userToken") String userToken) {
+
+        if (!playlistId.equals(tokenProvider.getUserIdFromJWT(userToken))) {
+            throw new NotOwnerException("You are not owner of playlist of id: " + playlistId);
+        }
+
         model.addAttribute("playlistId", playlistId);
         model.addAttribute("token", token);
         return "my";
