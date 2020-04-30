@@ -9,15 +9,21 @@ function getUsername() {
  * Redirects to user's playlist.
  */
 $("#myPlaylistBtn").on("click", () => {
-    // todo if there is no jwt, get new from backend
-    // todo get id from jwt
     Cookies.set("username", getUsername());
-    const id = "xd";
-    window.open(`/my/${id}`, "_self")
+
+    // get user id and go to user's playlist
+    axios.get("/user/get-id")
+        .then((response) => {
+            const id = response.data.userId;
+            window.open(`/my/${id}`, "_self")
+        })
+        .catch((error) => {
+            console.log(error)
+        });
 })
 
 /**
- * Open box where you can specify, which playlist you want to join.
+ * Display box where you can specify, which playlist you want to join.
  */
 $("#joinPlaylistBtn").on("click", () => {
     // check if user gave nickname

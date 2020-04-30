@@ -30,10 +30,11 @@ public class PlaylistController {
                         SimpMessageHeaderAccessor headerAccessor) {
         String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
         if (currentRoomId != null) {
-            PlaylistMessage leaveMessage = new PlaylistMessage(MessageType.LEAVE, message.getUsername());
-            messagingTemplate.convertAndSend(format("/room/%s", currentRoomId), leaveMessage);
+            LeaveMessage leaveMessage = new LeaveMessage();
+            message.setUserId(message.getUserId());
+            messagingTemplate.convertAndSend(format("/room/%s", roomId), leaveMessage);
         }
-        headerAccessor.getSessionAttributes().put("username", message.getUsername());
+        headerAccessor.getSessionAttributes().put("userId", message.getUserId());
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
     }
 

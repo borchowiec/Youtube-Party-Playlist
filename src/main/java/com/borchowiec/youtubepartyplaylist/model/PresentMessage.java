@@ -7,14 +7,7 @@ public class PresentMessage {
     private final MessageType type = MessageType.PRESENT;
     private String username;
     private UserType userType;
-
-    public PresentMessage() {
-    }
-
-    public PresentMessage(String username, UserType userType) {
-        this.username = username;
-        this.userType = userType;
-    }
+    private String userId;
 
     public MessageType getType() {
         return type;
@@ -34,5 +27,13 @@ public class PresentMessage {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
