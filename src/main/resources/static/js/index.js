@@ -1,25 +1,40 @@
 /**
+ * @returns {string | jQuery} Username from nickname input.
+ */
+function getUsername() {
+    return $(".nicknameInput").val().trim();
+}
+
+/**
  * Redirects to user's playlist.
  */
 $("#myPlaylistBtn").on("click", () => {
-    // todo if there is no jwt, get new from backend
-    // todo get id from jwt
-    const id = "123asdasdasd1231";
-    window.open(`/my/${id}`, "_self")
+    Cookies.set("username", getUsername());
+
+    // get user id and go to user's playlist
+    axios.get("/user/get-id")
+        .then((response) => {
+            const id = response.data.userId;
+            window.open(`/my/${id}`, "_self")
+        })
+        .catch((error) => {
+            console.log(error)
+        });
 })
 
 /**
- * Open box where you can specify, which playlist you want to join.
+ * Display box where you can specify, which playlist you want to join.
  */
 $("#joinPlaylistBtn").on("click", () => {
     // check if user gave nickname
-    const nickname = $(".nicknameInput").val().trim();
+    const nickname = getUsername();
     if (nickname.length === 0) {
         const errorLabel = $(".nickErrorMsg");
         errorLabel.text("You should type your nickname");
         errorLabel.show();
     }
     else {
+        Cookies.set("username", nickname);
         $("#joinPlaylistBox").show();
     }
 })
@@ -48,5 +63,9 @@ $("#joinPlaylistBox .joinBtn").on("click", () => {
 })
 
 $(document).ready(function(){
-    // todo if there is jwt, fill nickname
+    // if cookies contains username, put it in nickname input
+    const username = Cookies.get("username");
+    if (username) {
+        $(".nicknameInput").val(username);
+    }
 });
