@@ -1,5 +1,6 @@
 package com.borchowiec.youtubepartyplaylist.event;
 
+import com.borchowiec.youtubepartyplaylist.model.LeaveMessage;
 import com.borchowiec.youtubepartyplaylist.model.MessageType;
 import com.borchowiec.youtubepartyplaylist.model.PlaylistMessage;
 import org.springframework.context.event.EventListener;
@@ -23,14 +24,12 @@ public class WebSocketEventListener {
   public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
     StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
-    String username = (String) headerAccessor.getSessionAttributes().get("username");
+    String userId = (String) headerAccessor.getSessionAttributes().get("userId");
     String roomId = (String) headerAccessor.getSessionAttributes().get("room_id");
-    if (username != null) {
-      PlaylistMessage chatMessage = new PlaylistMessage();
-      chatMessage.setType(MessageType.LEAVE);
-      chatMessage.setUsername(username);
-
-      messagingTemplate.convertAndSend(format("/room/%s", roomId), chatMessage);
+    if (userId != null) {
+      LeaveMessage message = new LeaveMessage();
+      message.setUserId(userId);
+      messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
     }
   }
 }

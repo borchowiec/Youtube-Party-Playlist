@@ -11,7 +11,7 @@ function getUsername() {
 $("#myPlaylistBtn").on("click", () => {
     Cookies.set("username", getUsername());
 
-    return axios.get("/user/get-id")
+    axios.get("/user/get-id")
         .then((response) => {
             const id = response.data.userId;
             window.open(`/my/${id}`, "_self")

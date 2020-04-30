@@ -1,3 +1,5 @@
+let users = new Map();
+
 /**
  * Copies text of element to user's clipboard.
  * @param cssQuery element containing data to copy.
@@ -24,38 +26,40 @@ function showElement(cssQuery, time) {
  * Adds user to table in page.
  * @param username
  * @param userType if user is a owner, it will be decorated
+ * @param userId id of user
  */
-function addUserToTable(username, userType) {
-    // todo check by id if user already exists in table
-    let length = $("#usersBody tr").filter(function() {
-        return $(this).children("td").eq(1).text().trim() === username;
-    }).length;
-
-    // if user already exists in users table
-    if (length > 0) return;
-
-    const tr = $("<tr></tr>");
-    tr.append(`<td><i class="fas fa-user"></i></td>`)
-    tr.append(`<td>${username}</td>`)
-
-    if (userType === "OWNER") {
-        tr.addClass("has-text-warning");
-        $("#usersBody").prepend(tr);
-    }
-    else {
-        tr.addClass("has-text-white");
-        $("#usersBody").append(tr);
-    }
+function addUserToTable(username, userType, userId) {
+    users.set(userId, {username: username, userType: userType})
+    console.log(users);
+    refreshUserTable();
 }
 
 /**
  * Removes user from table of users.
- * @param username
+ * @param userId
  */
-function removeUserFromTable(username) { // todo remove by id
-    $("#usersBody tr").filter(function() {
-        return $(this).children("td").eq(1).text().trim() === username;
-    }).first().remove();
+function removeUserFromTable(userId) {
+    users.delete(userId);
+    console.log(users);
+    refreshUserTable();
+}
+
+function refreshUserTable() {
+    $("#usersBody").empty();
+    users.forEach(v  => {
+        const tr = $("<tr></tr>");
+        tr.append(`<td><i class="fas fa-user"></i></td>`)
+        tr.append(`<td>${v.username}</td>`)
+
+        if (v.userType === "OWNER") {
+            tr.addClass("has-text-warning");
+            $("#usersBody").prepend(tr);
+        }
+        else {
+            tr.addClass("has-text-white");
+            $("#usersBody").append(tr);
+        }
+    })
 }
 
 /**

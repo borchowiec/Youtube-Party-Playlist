@@ -1,5 +1,6 @@
 let stompClient;
 let username;
+let userId;
 let roomId;
 let topic;
 let userType;
@@ -12,7 +13,7 @@ function onMessageReceived(msgObj) {
     const message = JSON.parse(msgObj.body);
 
     if (message.type === "JOIN") { // add user to users table
-        addUserToTable(message.username, message.userType);
+        addUserToTable(message.username, message.userType, message.userId);
 
         if (userType === "OWNER") { // send updated playlist if new user join
             sendUpdatedPlaylist(videos);
@@ -23,10 +24,10 @@ function onMessageReceived(msgObj) {
         sendImPresent(); // because new user don't know who is present
     }
     else if (message.type === "PRESENT") {
-        addUserToTable(message.username, message.userType);
+        addUserToTable(message.username, message.userType, message.userId);
     }
     else if (message.type === "LEAVE") { // remove user from users table because user leaved
-        removeUserFromTable(message.username);
+        removeUserFromTable(message.userId);
     }
     else if (message.type === "ADD_VIDEO" && userType === "OWNER") { // check if video is correct and add it to playlist
         getInfoAboutVideo(message.url).then(videoInfo => {
@@ -52,16 +53,24 @@ function onConnected() {
     roomId = playlistId;
     topic = `/app/playlist-ws/${roomId}`;
 
-    stompClient.subscribe(`/room/${roomId}`, onMessageReceived);
+    axios.get("/user/get-id")
+        .then((response) => {
+            userId = response.data.userId;
 
-    stompClient.send(`${topic}/addUser`,
-        {},
-        JSON.stringify({username: username, type: 'JOIN', userType: userType})
-    );
+            stompClient.subscribe(`/room/${roomId}`, onMessageReceived);
+
+            stompClient.send(`${topic}/addUser`,
+                {},
+                JSON.stringify({username: username, type: 'JOIN', userType: userType, userId: userId})
+            );
+        })
+        .catch((error) => {
+            console.log(error)
+        });
 }
 
-function onError() {
-    // todo on error
+function onError(event) {
+    console.log(event)
 }
 
 function connectToPlaylist(newUserType) {
@@ -105,7 +114,7 @@ function sendUpdatedPlaylist(playlist) {
 function sendImPresent() {
     stompClient.send(`${topic}/present`,
         {},
-        JSON.stringify({type: 'PRESENT', username: username, userType: userType})
+        JSON.stringify({type: 'PRESENT', username: username, userType: userType, userId: userId})
     );
 }
 

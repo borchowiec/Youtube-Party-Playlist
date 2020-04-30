@@ -6,15 +6,8 @@ package com.borchowiec.youtubepartyplaylist.model;
 public class JoinMessage {
     private final MessageType type = MessageType.JOIN;
     private String username;
+    private String userId;
     private UserType userType;
-
-    public JoinMessage() {
-    }
-
-    public JoinMessage(String username, UserType userType) {
-        this.username = username;
-        this.userType = userType;
-    }
 
     public MessageType getType() {
         return type;
@@ -34,5 +27,13 @@ public class JoinMessage {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
