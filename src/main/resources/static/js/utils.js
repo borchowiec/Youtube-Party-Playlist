@@ -19,7 +19,7 @@ function copyContentOfElementToClipboard(cssQuery) {
  */
 function showElement(cssQuery, time) {
     $(cssQuery).show();
-    setTimeout(function() { $("#copyMessage").hide(); }, time);
+    setTimeout(function() { $(cssQuery).hide(); }, time);
 }
 
 /**

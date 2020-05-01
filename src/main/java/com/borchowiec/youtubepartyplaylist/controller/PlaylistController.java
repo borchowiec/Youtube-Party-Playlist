@@ -77,4 +77,14 @@ public class PlaylistController {
     public void currentVideo(@DestinationVariable String roomId, @Payload CurrentVideoMessage message) {
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
     }
+
+    /**
+     * Sends message to specific user.
+     * @param roomId all users in this room will receive message.
+     * @param message Contains message.
+     */
+    @MessageMapping("/playlist-ws/{roomId}/message")
+    public void message(@DestinationVariable String roomId, @Payload BasicMessage message) {
+        messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
+    }
 }
