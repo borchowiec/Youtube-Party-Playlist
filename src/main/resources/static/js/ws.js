@@ -4,6 +4,7 @@ let userId;
 let roomId;
 let topic;
 let userType;
+let filters = new Map();
 
 /**
  * Receives messages and handles it in different ways depending on type of message.
@@ -12,7 +13,11 @@ let userType;
 function onMessageReceived(msgObj) {
     const message = JSON.parse(msgObj.body);
 
-    if (message.type === "JOIN") { // add user to users table
+    if (message.type === "ERROR_MESSAGE" && message.receiverId === userId) {
+        $("#errorMessage").text(message.messageContent);
+        showElement("#errorMessage", 5000);
+    }
+    else if (message.type === "JOIN") { // add user to users table
         addUserToTable(message.username, message.userType, message.userId);
 
         if (userType === "OWNER") { // send updated playlist if new user join
@@ -30,9 +35,18 @@ function onMessageReceived(msgObj) {
         removeUserFromTable(message.userId);
     }
     else if (message.type === "ADD_VIDEO" && userType === "OWNER") { // check if video is correct and add it to playlist
+        // filters
         getInfoAboutVideo(message.url).then(videoInfo => {
             if (videoInfo !== null) {
-                addVideo(videoInfo);
+                // filters
+                const error = Array.from(filters.values()).find(filter => filter.filter(videoInfo));
+
+                if (error) {
+                    sendMessage(message.userId, error.errorMessage, "ERROR_MESSAGE")
+                }
+                else {
+                    addVideo(videoInfo);
+                }
             }
         });
     }
@@ -93,7 +107,7 @@ function connectToPlaylist(newUserType) {
 function sendUrl(url) {
     stompClient.send(`${topic}/addVideo`,
         {},
-        JSON.stringify({username: username, type: 'ADD_VIDEO', url: url})
+        JSON.stringify({userId: userId, type: 'ADD_VIDEO', url: url})
     );
 }
 
@@ -127,5 +141,18 @@ function sendCurrentVideo(index, video) {
     stompClient.send(`${topic}/currentVideo`,
         {},
         JSON.stringify({type: 'CURRENT_VIDEO', index: index, video: JSON.stringify(video)})
+    );
+}
+
+/**
+ * Sends message to specific user.
+ * @param receiverId User that will receive message
+ * @param messageContent content of message
+ * @param messageType e.g. ERROR_MESSAGE.
+ */
+function sendMessage(receiverId, messageContent, messageType) {
+    stompClient.send(`${topic}/message`,
+        {},
+        JSON.stringify({type: messageType, messageContent: messageContent, receiverId: receiverId})
     );
 }

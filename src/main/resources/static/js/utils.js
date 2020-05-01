@@ -19,7 +19,7 @@ function copyContentOfElementToClipboard(cssQuery) {
  */
 function showElement(cssQuery, time) {
     $(cssQuery).show();
-    setTimeout(function() { $("#copyMessage").hide(); }, time);
+    setTimeout(function() { $(cssQuery).hide(); }, time);
 }
 
 /**
@@ -30,7 +30,6 @@ function showElement(cssQuery, time) {
  */
 function addUserToTable(username, userType, userId) {
     users.set(userId, {username: username, userType: userType})
-    console.log(users);
     refreshUserTable();
 }
 
@@ -40,7 +39,6 @@ function addUserToTable(username, userType, userId) {
  */
 function removeUserFromTable(userId) {
     users.delete(userId);
-    console.log(users);
     refreshUserTable();
 }
 
@@ -76,7 +74,7 @@ function getInfoAboutVideo(stringUrl) {
         return null;
     }
     else {
-        const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&id=${id}&key=${token}`;
+        const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails%2C+id%2C+snippet&id=${id}&key=${token}`;
         return axios.get(apiUrl)
             .then((response) => {
                 if (response.data.pageInfo.totalResults < 1) {

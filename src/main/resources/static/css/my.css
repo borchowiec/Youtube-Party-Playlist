@@ -36,3 +36,16 @@
 #player {
     width: 100% !important;
 }
+
+#propertiesSection {
+    margin-top: 20px;
+}
+
+#propertiesSection input {
+    width: 100px;
+}
+
+#propertiesSection input[type="checkbox"] {
+    width: 30px;
+    height: 40px;
+}

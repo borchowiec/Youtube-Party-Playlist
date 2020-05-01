@@ -254,6 +254,38 @@ function setPlaylistFromCookies() {
     videos = playlistContent;
 }
 
+function initDurationFilter() {
+    // add duration filter
+    $("#maxDurationCheckbox").change(() => {
+        const checked = $("#maxDurationCheckbox").prop("checked")
+        if (checked) {
+            const maxDuration = parseInt($("#maxDurationInput").val());
+            Cookies.set("maxDuration", maxDuration);
+
+            filters.set("maxDuration", {
+                filter: (video) => {
+                    return (new Duration(video.contentDetails.duration)).inMinutes() > maxDuration;
+                },
+                errorMessage: `Video cannot be longer than ${maxDuration} minutes.`
+            })
+        }
+        else {
+            filters.delete("maxDuration")
+        }
+
+        Cookies.set("maxDurationFilter", checked);
+    })
+
+    const maxDuration = Cookies.get("maxDuration")
+    if (maxDuration) {
+        $("#maxDurationInput").val(parseInt(maxDuration));
+    }
+
+    if (Cookies.get("maxDurationFilter") === "true") {
+        $("#maxDurationCheckbox").click();
+    }
+}
+
 $(document).ready(function() {
     connectToPlaylist("OWNER");
     $("#togglePlayBtn").on("click", () => togglePlay());
@@ -301,5 +333,8 @@ $(document).ready(function() {
         player.stopVideo();
         resetNotification.hide();
     });
+
+    initDurationFilter();
+
     initYoutubeIframe();
 });

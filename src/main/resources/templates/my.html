@@ -106,6 +106,17 @@
     </div>
 </section>
 
+<section id="propertiesSection">
+    <div class="container">
+        <div class="column is-4 has-background-info has-text-white">
+            <h2 class="title has-text-centered">Settings</h2>
+            <p>Max duration of video (Minutes)</p>
+            <input type="checkbox" id="maxDurationCheckbox">
+            <input class="input" type="number" value="10" min="1" id="maxDurationInput">
+        </div>
+    </div>
+</section>
+
 <div class="notification is-warning" id="resetNotification">
     <button class="delete"></button>
     <h1 class="has-text-centered">Are you sure you want to reset this playlist?</h1>
@@ -127,6 +138,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/duration.js"></script>
 <script src="/js/data.js"></script>
 <script src="/js/utils.js"></script>
 <script src="/js/ws.js"></script>
