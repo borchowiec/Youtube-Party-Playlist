@@ -4,6 +4,7 @@ let userId;
 let roomId;
 let topic;
 let userType;
+let filters = new Map();
 
 /**
  * Receives messages and handles it in different ways depending on type of message.
@@ -30,9 +31,16 @@ function onMessageReceived(msgObj) {
         removeUserFromTable(message.userId);
     }
     else if (message.type === "ADD_VIDEO" && userType === "OWNER") { // check if video is correct and add it to playlist
+        // filters
         getInfoAboutVideo(message.url).then(videoInfo => {
             if (videoInfo !== null) {
-                addVideo(videoInfo);
+                const error = Array.from(filters.values()).find(filter => filter.filter(videoInfo));
+                if (error) {
+                    console.log(message);
+                }
+                else {
+                    addVideo(videoInfo);
+                }
             }
         });
     }
