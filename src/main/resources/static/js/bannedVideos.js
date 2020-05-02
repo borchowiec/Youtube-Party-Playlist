@@ -16,6 +16,7 @@ function refreshBannedVideos() {
     const base = $(".bannedVideosList");
     base.empty();
     bannedVideos.forEach((title, id) => base.append(createBannedVideosListElement(id, title)));
+    saveBannedVideos();
 
     filters.set("bannedVideo", {
         filter: (video) => {
@@ -35,9 +36,21 @@ function unbanVideo(id) {
     refreshBannedVideos();
 }
 
+function loadBannedVideos() {
+    let stringBannedVideos = Cookies.get("bannedVideos");
+    if (stringBannedVideos) {
+        bannedVideos = new Map(JSON.parse(stringBannedVideos));
+    }
+}
+
+function saveBannedVideos() {
+    Cookies.set("bannedVideos", JSON.stringify([...bannedVideos.entries()]));
+}
+
 $(document).ready(function() {
     const base = $("#bannedVideos");
     base.append(bannedVideosHtml);
 
+    loadBannedVideos();
     refreshBannedVideos();
 });
