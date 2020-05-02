@@ -7,7 +7,8 @@ const bannedVideosHtml = `
 let bannedVideos = new Map()
 
 function createBannedVideosListElement(id, title) {
-    let element = $(`<li><button class="button is-danger is-small"><i class="fas fa-times"></i></button>${title}</li>`);
+    let element = $(`<li><button class="button is-danger is-small unban"><i class="fas fa-times"></i></button>${title}</li>`);
+    element.find("button.unban").on("click", () => unbanVideo(id));
     return element;
 }
 
@@ -18,7 +19,6 @@ function refreshBannedVideos() {
 
     filters.set("bannedVideo", {
         filter: (video) => {
-            console.log(video);
             return bannedVideos.get(video.id);
         },
         errorMessage: `The video you sent is banned!`
@@ -30,13 +30,14 @@ function banVideo(id, title) {
     refreshBannedVideos();
 }
 
+function unbanVideo(id) {
+    bannedVideos.delete(id);
+    refreshBannedVideos();
+}
+
 $(document).ready(function() {
     const base = $("#bannedVideos");
     base.append(bannedVideosHtml);
-
-    bannedVideos.set("iddd1", "hyhyehehe hyhyh heheh hehe 1");
-    bannedVideos.set("iddd2", "hyhyehehe hyhyh heheh hehe 2");
-    bannedVideos.set("iddd3", "hyhyehehe hyhyh heheh hehe 3");
 
     refreshBannedVideos();
 });
