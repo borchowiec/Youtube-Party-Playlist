@@ -15,6 +15,14 @@ function refreshBannedVideos() {
     const base = $(".bannedVideosList");
     base.empty();
     bannedVideos.forEach((title, id) => base.append(createBannedVideosListElement(id, title)));
+
+    filters.set("bannedVideo", {
+        filter: (video) => {
+            console.log(video);
+            return bannedVideos.get(video.id);
+        },
+        errorMessage: `The video you sent is banned!`
+    })
 }
 
 function banVideo(id, title) {
