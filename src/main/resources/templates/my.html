@@ -84,11 +84,11 @@
                 <button class="button is-danger" id="resetBtn">Reset playlist</button>
                 <table class="table is-fullwidth">
                     <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody id="playlistBody"></tbody>
                 </table>
@@ -108,11 +108,15 @@
 
 <section id="propertiesSection">
     <div class="container">
-        <div class="column is-4 has-background-info has-text-white">
-            <h2 class="title has-text-centered">Settings</h2>
-            <p>Max duration of video (Minutes)</p>
-            <input type="checkbox" id="maxDurationCheckbox">
-            <input class="input" type="number" value="10" min="1" id="maxDurationInput">
+        <div class="columns">
+            <div class="column is-4 has-background-info has-text-white">
+                <h2 class="title has-text-centered">Settings</h2>
+                <p>Max duration of video (Minutes)</p>
+                <input type="checkbox" id="maxDurationCheckbox">
+                <input class="input" type="number" value="10" min="1" id="maxDurationInput">
+            </div>
+
+            <div class="column is-4" id="bannedVideos"></div>
         </div>
     </div>
 </section>
@@ -138,6 +142,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/bannedVideos.js"></script>
 <script src="/js/duration.js"></script>
 <script src="/js/data.js"></script>
 <script src="/js/utils.js"></script>
