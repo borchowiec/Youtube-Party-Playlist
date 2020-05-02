@@ -234,6 +234,13 @@ function createPlaylistElement(index, video) {
     downContainer.append(downBtn);
     buttonsContainer.append(downContainer);
 
+    // ban button
+    const banBtn = $('<button class="button is-danger is-small"><i class="fas fa-ban"></i></button>');
+    banBtn.on("click", () => banVideo(video.id, video.title));
+    const banContainer = $('<div class="column"></div>');
+    banContainer.append(banBtn);
+    buttonsContainer.append(banContainer);
+
     buttons.append(buttonsContainer);
     tr.append(buttons);
 

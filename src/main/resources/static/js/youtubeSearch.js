@@ -36,12 +36,15 @@ function createSearchResultElement(video) {
             <p class="is-size-7-mobile is-size-6-tablet has-text-grey">${video.snippet.description}</p>
         </div>
         <div class="column is-narrow" style="text-align: center">
-            <button class="button is-large is-danger"><i class="fas fa-plus"></i></button>
+            <button class="button is-large is-danger add"><i class="fas fa-plus"></i></button>
+            ${userType === "OWNER" && `<button class="button is-large is-danger ban"><i class="fas fa-ban"></i></button>`}
         </div>
     </div>
     `;
     const result = $(htmlElement);
-    result.find("button").on("click", () => {
+
+    // add video
+    result.find("button.add").on("click", () => {
         if (userType === "OWNER") {
             addVideo(video);
         }
@@ -51,6 +54,12 @@ function createSearchResultElement(video) {
         $("#phraseInput").val("");
         $(".searchResults").empty();
     });
+
+    // ban video
+    result.find("button.ban").on("click", () => {
+        banVideo(video.id.videoId, video.snippet.title);
+    });
+
     return result;
 }
 

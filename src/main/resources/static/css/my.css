@@ -49,3 +49,7 @@
     width: 30px;
     height: 40px;
 }
+
+.bannedVideosList li {
+    margin-bottom: 10px;
+}
