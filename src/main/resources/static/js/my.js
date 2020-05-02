@@ -333,12 +333,17 @@ $(document).ready(function() {
     $("#resetNotification .delete").on("click", () => resetNotification.hide());
     $("#resetNotification .no").on("click", () => resetNotification.hide());
     $("#resetNotification .yes").on("click", () => {
+        // videos
         videos = [];
         Cookies.set("playlistContent", JSON.stringify(videos));
         refreshPlaylist();
         sendUpdatedPlaylist(videos);
         player.stopVideo();
         resetNotification.hide();
+
+        // banned videos
+        bannedVideos = new Map();
+        refreshBannedVideos();
     });
 
     initDurationFilter();
