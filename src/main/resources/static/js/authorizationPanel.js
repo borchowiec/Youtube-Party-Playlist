@@ -45,7 +45,7 @@ function initAuthorizationFilter() {
             sendAnybodyThereMessage();
         }
         else {
-            userFilters.delete("maxDuration")
+            userFilters.delete("authorizedUsers")
         }
 
         Cookies.set("authorizedUsers", checked);

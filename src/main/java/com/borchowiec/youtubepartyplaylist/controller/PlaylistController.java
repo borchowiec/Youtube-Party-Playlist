@@ -104,6 +104,11 @@ public class PlaylistController {
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
     }
 
+    @MessageMapping("/playlist-ws/{roomId}/kick")
+    public void kick(@DestinationVariable String roomId, @Payload KickMessage message) {
+        messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
+    }
+
     /**
      * Adds token that authorize user to joining playlist.
      * @param playlistToken token of playlist. The same token as owner token.

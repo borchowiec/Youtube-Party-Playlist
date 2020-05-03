@@ -18,6 +18,14 @@ function onMessageReceived(msgObj) {
         $("#errorMessage").text(message.messageContent);
         showElement("#errorMessage", 5000);
     }
+    else if (message.userId === userId && message.type === "KICK") {
+        disconnect();
+        $("#errorMessage").show();
+        $("#errorMessage").text(message.reason);
+        $("#currentTitle").text("");
+        $("#playlistBody").empty();
+        $("#usersBody").empty();
+    }
     else if (message.type === "ANYBODY_THERE") {
         sendImPresent();
     }
@@ -38,8 +46,7 @@ function onMessageReceived(msgObj) {
             const error = Array.from(userFilters.values()).find(filter => filter.filter(message));
 
             if (error) {
-                console.log(error);
-                // todo kick user
+                sendKickMessage(message.userId, error.errorMessage);
             }
             else {
                 addUserToTable(message.username, message.userType, message.userId);
@@ -115,6 +122,10 @@ function connectToPlaylist(newUserType) {
     }
 }
 
+function disconnect() {
+    stompClient.disconnect();
+}
+
 /**
  * Sends url of video to OWNER. OWNER will check video and decide if it's correct.
  * @param url Video
@@ -177,5 +188,12 @@ function sendAnybodyThereMessage() {
     stompClient.send(`${topic}/anybodyThere`,
         {},
         JSON.stringify({type: "ANYBODY_THERE"})
+    );
+}
+
+function sendKickMessage(kickedUser, reason) {
+    stompClient.send(`${topic}/kick`,
+        {},
+        JSON.stringify({type: "KICK", userId: kickedUser, reason: reason})
     );
 }
