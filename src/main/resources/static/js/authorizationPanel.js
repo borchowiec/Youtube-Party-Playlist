@@ -9,24 +9,26 @@ const authorizationPanelHtml = `
         <button class="button is-danger is-light is-fullwidth" id="copyInviteLink">Copy invite link</button>
     </div>
     <div class="columns" style="margin-top: 10px; padding: 0 40px">
-        <button class="button is-danger is-light is-fullwidth">Show invite QR code</button>
+        <button class="button is-danger is-light is-fullwidth" id="showQr">Show invite QR code</button>
     </div>
 </div>
 `;
 
-function copyInviteLink() {
+function getInvitationLink() {
     const userToken = Cookies.get("userToken");
-    if (userToken) {
-        const $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val(`${window.location.origin}/auth/${userToken}`).select();
-        document.execCommand("copy");
-        $temp.remove();
+    return `${window.location.origin}/auth/${userToken}`;
+}
 
-        const copyBtn = $("#copyInviteLink");
-        copyBtn.text("Copied!");
-        setTimeout(() => copyBtn.text("Copy invite link"), 1000);
-    }
+function copyInviteLink() {
+    const $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val(getInvitationLink()).select();
+    document.execCommand("copy");
+    $temp.remove();
+
+    const copyBtn = $("#copyInviteLink");
+    copyBtn.text("Copied!");
+    setTimeout(() => copyBtn.text("Copy invite link"), 1000);
 }
 
 $(document).ready(function() {
@@ -34,4 +36,8 @@ $(document).ready(function() {
     base.append(authorizationPanelHtml);
 
     $("#copyInviteLink").on("click", () => copyInviteLink());
+
+    $("#showQr").on("click", () => $(".qrContainer").show());
+    new QRCode(document.getElementById("qrcode"), getInvitationLink());
+    $("button.close").on("click", () => $(".qrContainer").hide())
 });

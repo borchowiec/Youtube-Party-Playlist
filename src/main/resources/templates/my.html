@@ -130,6 +130,11 @@
     <button class="button is-link is-success is-fullwidth no">NO</button>
 </div>
 
+<div class="qrContainer" style="display: none">
+    <button class="button is-danger is-small close"><i class="fas fa-times"></i></button>
+    <div id="qrcode"></div>
+</div>
+
 <script th:inline="javascript" class="tempScript">
     /*<![CDATA[*/
     const tempPlaylistId = /*[[${playlistId}]]*/ 'default';
@@ -144,6 +149,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/qrcode.min.js"></script>
 <script src="/js/authorizationPanel.js"></script>
 <script src="/js/bannedVideos.js"></script>
 <script src="/js/duration.js"></script>
