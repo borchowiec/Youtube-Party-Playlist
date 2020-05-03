@@ -37,7 +37,9 @@ function createSearchResultElement(video) {
         </div>
         <div class="column is-narrow" style="text-align: center">
             <button class="button is-large is-danger add"><i class="fas fa-plus"></i></button>
-            ${userType === "OWNER" && `<button class="button is-large is-danger ban"><i class="fas fa-ban"></i></button>`}
+            ${userType === "OWNER" 
+                ? `<button class="button is-large is-danger ban"><i class="fas fa-ban"></i></button>` 
+                : ""}
         </div>
     </div>
     `;
