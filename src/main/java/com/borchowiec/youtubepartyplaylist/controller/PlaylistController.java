@@ -1,12 +1,21 @@
 package com.borchowiec.youtubepartyplaylist.controller;
 
 import com.borchowiec.youtubepartyplaylist.model.*;
+import com.borchowiec.youtubepartyplaylist.security.JwtTokenProvider;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.view.RedirectView;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 
 import static java.lang.String.format;
 
@@ -14,9 +23,11 @@ import static java.lang.String.format;
 public class PlaylistController {
 
     private final SimpMessageSendingOperations messagingTemplate;
+    private final JwtTokenProvider tokenProvider;
 
-    public PlaylistController(SimpMessageSendingOperations messagingTemplate) {
+    public PlaylistController(SimpMessageSendingOperations messagingTemplate, JwtTokenProvider tokenProvider) {
         this.messagingTemplate = messagingTemplate;
+        this.tokenProvider = tokenProvider;
     }
 
     /**
@@ -86,5 +97,34 @@ public class PlaylistController {
     @MessageMapping("/playlist-ws/{roomId}/message")
     public void message(@DestinationVariable String roomId, @Payload BasicMessage message) {
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
+    }
+
+    @MessageMapping("/playlist-ws/{roomId}/anybodyThere")
+    public void anybodyThere(@DestinationVariable String roomId, @Payload AnybodyThereMessage message) {
+        messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
+    }
+
+    @MessageMapping("/playlist-ws/{roomId}/kick")
+    public void kick(@DestinationVariable String roomId, @Payload KickMessage message) {
+        messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
+    }
+
+    /**
+     * Adds token that authorize user to joining playlist.
+     * @param playlistToken token of playlist. The same token as owner token.
+     * @param response Contains cookie with authorization. Redirects to playlist.
+     * @throws IOException
+     */
+    @GetMapping("/auth/{playlistToken}")
+    public void authorize(@PathVariable String playlistToken, HttpServletResponse response) throws IOException {
+        if (tokenProvider.validateToken(playlistToken)) {
+            String id = tokenProvider.getUserIdFromJWT(playlistToken);
+
+            Cookie cookie = new Cookie("playlistAuthorization", playlistToken);
+            cookie.setPath("/");
+
+            response.addCookie(cookie);
+            response.sendRedirect("/playlist/" + id);
+        }
     }
 }
