@@ -99,6 +99,11 @@ public class PlaylistController {
         messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
     }
 
+    @MessageMapping("/playlist-ws/{roomId}/anybodyThere")
+    public void anybodyThere(@DestinationVariable String roomId, @Payload AnybodyThereMessage message) {
+        messagingTemplate.convertAndSend(format("/room/%s", roomId), message);
+    }
+
     /**
      * Adds token that authorize user to joining playlist.
      * @param playlistToken token of playlist. The same token as owner token.

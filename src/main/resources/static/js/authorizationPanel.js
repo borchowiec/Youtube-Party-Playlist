@@ -31,6 +31,27 @@ function copyInviteLink() {
     setTimeout(() => copyBtn.text("Copy invite link"), 1000);
 }
 
+function initAuthorizationFilter() {
+    // add duration filter
+    $("#accessByLinkCheckbox").change(() => {
+        const checked = $("#accessByLinkCheckbox").prop("checked")
+        if (checked) {
+            userFilters.set("authorizedUsers", {
+                filter: (userMessage) => {
+                    return Cookies.get("userToken") !== userMessage.playlistAuthorization;
+                },
+                errorMessage: `You can join this playlist only via the invitation link.`
+            })
+            sendAnybodyThereMessage();
+        }
+        else {
+            userFilters.delete("maxDuration")
+        }
+
+        Cookies.set("authorizedUsers", checked);
+    })
+}
+
 $(document).ready(function() {
     const base = $("#authorizationPanel");
     base.append(authorizationPanelHtml);
@@ -40,4 +61,9 @@ $(document).ready(function() {
     new QRCode(document.getElementById("qrcode"), getInvitationLink());
     $("#showQr").on("click", () => $(".qrContainer").show());
     $("button.close").on("click", () => $(".qrContainer").hide())
+
+    initAuthorizationFilter();
+    if (Cookies.get("authorizedUsers") === "true") {
+        $("#accessByLinkCheckbox").click();
+    }
 });

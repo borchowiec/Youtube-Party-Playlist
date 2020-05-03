@@ -18,7 +18,7 @@ function refreshBannedVideos() {
     bannedVideos.forEach((title, id) => base.append(createBannedVideosListElement(id, title)));
     saveBannedVideos();
 
-    filters.set("bannedVideo", {
+    videoFilters.set("bannedVideo", {
         filter: (video) => {
             return bannedVideos.get(video.id);
         },

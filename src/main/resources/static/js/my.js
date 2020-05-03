@@ -269,7 +269,7 @@ function initDurationFilter() {
             const maxDuration = parseInt($("#maxDurationInput").val());
             Cookies.set("maxDuration", maxDuration);
 
-            filters.set("maxDuration", {
+            videoFilters.set("maxDuration", {
                 filter: (video) => {
                     return (new Duration(video.contentDetails.duration)).inMinutes() > maxDuration;
                 },
@@ -277,7 +277,7 @@ function initDurationFilter() {
             })
         }
         else {
-            filters.delete("maxDuration")
+            videoFilters.delete("maxDuration")
         }
 
         Cookies.set("maxDurationFilter", checked);
