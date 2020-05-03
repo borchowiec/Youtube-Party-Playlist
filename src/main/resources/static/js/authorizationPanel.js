@@ -37,7 +37,7 @@ $(document).ready(function() {
 
     $("#copyInviteLink").on("click", () => copyInviteLink());
 
-    $("#showQr").on("click", () => $(".qrContainer").show());
     new QRCode(document.getElementById("qrcode"), getInvitationLink());
+    $("#showQr").on("click", () => $(".qrContainer").show());
     $("button.close").on("click", () => $(".qrContainer").hide())
 });

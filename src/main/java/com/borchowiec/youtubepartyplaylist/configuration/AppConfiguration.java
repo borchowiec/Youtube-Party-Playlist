@@ -16,7 +16,7 @@ public class AppConfiguration {
         FilterRegistrationBean<JwtTokenFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new JwtTokenFilter());
-        registrationBean.addUrlPatterns("/", "/my/*", "/playlist/*");
+        registrationBean.addUrlPatterns("/", "/my/*", "/playlist/*", "/auth/*");
 
         return registrationBean;
     }
