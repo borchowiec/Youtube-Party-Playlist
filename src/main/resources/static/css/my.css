@@ -57,3 +57,7 @@
 .bannedVideosList button {
     margin-right: 10px;
 }
+
+.accessPropertyLabel {
+    margin-top: 6px !important;
+}
