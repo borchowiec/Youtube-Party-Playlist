@@ -115,6 +115,7 @@ function connectToPlaylist(newUserType) {
     if (username) {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
+        stompClient.debug = null;
         stompClient.connect({}, onConnected, onError);
     }
     else {
