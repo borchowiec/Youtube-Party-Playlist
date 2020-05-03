@@ -4,6 +4,8 @@ let userId;
 let roomId;
 let topic;
 let userType;
+let videoFilters = new Map();
+let userFilters = new Map();
 
 /**
  * Receives messages and handles it in different ways depending on type of message.
@@ -12,7 +14,22 @@ let userType;
 function onMessageReceived(msgObj) {
     const message = JSON.parse(msgObj.body);
 
-    if (message.type === "JOIN") { // add user to users table
+    if (message.type === "ERROR_MESSAGE" && message.receiverId === userId) {
+        $("#errorMessage").text(message.messageContent);
+        showElement("#errorMessage", 5000);
+    }
+    else if (message.userId === userId && message.type === "KICK") {
+        disconnect();
+        $("#errorMessage").show();
+        $("#errorMessage").text(message.reason);
+        $("#currentTitle").text("");
+        $("#playlistBody").empty();
+        $("#usersBody").empty();
+    }
+    else if (message.type === "ANYBODY_THERE") {
+        sendImPresent();
+    }
+    else if (message.type === "JOIN") { // add user to users table
         addUserToTable(message.username, message.userType, message.userId);
 
         if (userType === "OWNER") { // send updated playlist if new user join
@@ -24,6 +41,17 @@ function onMessageReceived(msgObj) {
         sendImPresent(); // because new user don't know who is present
     }
     else if (message.type === "PRESENT") {
+        if (userType === "OWNER" && message.userType === "GUEST") {
+            // user filters
+            const error = Array.from(userFilters.values()).find(filter => filter.filter(message));
+
+            if (error) {
+                sendKickMessage(message.userId, error.errorMessage);
+            }
+            else {
+                addUserToTable(message.username, message.userType, message.userId);
+            }
+        }
         addUserToTable(message.username, message.userType, message.userId);
     }
     else if (message.type === "LEAVE") { // remove user from users table because user leaved
@@ -32,7 +60,15 @@ function onMessageReceived(msgObj) {
     else if (message.type === "ADD_VIDEO" && userType === "OWNER") { // check if video is correct and add it to playlist
         getInfoAboutVideo(message.url).then(videoInfo => {
             if (videoInfo !== null) {
-                addVideo(videoInfo);
+                // filters
+                const error = Array.from(videoFilters.values()).find(filter => filter.filter(videoInfo));
+
+                if (error) {
+                    sendMessage(message.userId, error.errorMessage, "ERROR_MESSAGE")
+                }
+                else {
+                    addVideo(videoInfo);
+                }
             }
         });
     }
@@ -79,11 +115,16 @@ function connectToPlaylist(newUserType) {
     if (username) {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
+        stompClient.debug = null;
         stompClient.connect({}, onConnected, onError);
     }
     else {
         window.open("/", "_self")
     }
+}
+
+function disconnect() {
+    stompClient.disconnect();
 }
 
 /**
@@ -93,7 +134,7 @@ function connectToPlaylist(newUserType) {
 function sendUrl(url) {
     stompClient.send(`${topic}/addVideo`,
         {},
-        JSON.stringify({username: username, type: 'ADD_VIDEO', url: url})
+        JSON.stringify({userId: userId, type: 'ADD_VIDEO', url: url})
     );
 }
 
@@ -114,7 +155,8 @@ function sendUpdatedPlaylist(playlist) {
 function sendImPresent() {
     stompClient.send(`${topic}/present`,
         {},
-        JSON.stringify({type: 'PRESENT', username: username, userType: userType, userId: userId})
+        JSON.stringify({type: 'PRESENT', username: username, userType: userType, userId: userId,
+            playlistAuthorization: Cookies.get("playlistAuthorization")})
     );
 }
 
@@ -127,5 +169,32 @@ function sendCurrentVideo(index, video) {
     stompClient.send(`${topic}/currentVideo`,
         {},
         JSON.stringify({type: 'CURRENT_VIDEO', index: index, video: JSON.stringify(video)})
+    );
+}
+
+/**
+ * Sends message to specific user.
+ * @param receiverId User that will receive message
+ * @param messageContent content of message
+ * @param messageType e.g. ERROR_MESSAGE.
+ */
+function sendMessage(receiverId, messageContent, messageType) {
+    stompClient.send(`${topic}/message`,
+        {},
+        JSON.stringify({type: messageType, messageContent: messageContent, receiverId: receiverId})
+    );
+}
+
+function sendAnybodyThereMessage() {
+    stompClient.send(`${topic}/anybodyThere`,
+        {},
+        JSON.stringify({type: "ANYBODY_THERE"})
+    );
+}
+
+function sendKickMessage(kickedUser, reason) {
+    stompClient.send(`${topic}/kick`,
+        {},
+        JSON.stringify({type: "KICK", userId: kickedUser, reason: reason})
     );
 }

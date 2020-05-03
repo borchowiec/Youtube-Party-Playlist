@@ -5,15 +5,15 @@ package com.borchowiec.youtubepartyplaylist.model;
  */
 public class UrlMessage {
     private MessageType type;
-    private String username;
+    private String userId;
     private String url;
 
     public UrlMessage() {
     }
 
-    public UrlMessage(MessageType type, String username, String url) {
+    public UrlMessage(MessageType type, String userId, String url) {
         this.type = type;
-        this.username = username;
+        this.userId = userId;
         this.url = url;
     }
 
@@ -25,12 +25,12 @@ public class UrlMessage {
         this.type = type;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUrl() {

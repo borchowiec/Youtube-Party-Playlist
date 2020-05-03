@@ -36,3 +36,56 @@
 #player {
     width: 100% !important;
 }
+
+#propertiesSection {
+    margin-top: 20px;
+}
+
+#propertiesSection input {
+    width: 100px;
+}
+
+#propertiesSection input[type="checkbox"] {
+    width: 30px;
+    height: 40px;
+}
+
+.bannedVideosList li {
+    margin-bottom: 10px;
+}
+
+.bannedVideosList button {
+    margin-right: 10px;
+}
+
+.accessPropertyLabel {
+    margin-top: 6px !important;
+}
+
+.qrContainer {
+    z-index: 100;
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.49);
+}
+
+button.close {
+    z-index: 101;
+    top: 10px;
+    right: 10px;
+    position: fixed;
+}
+
+#qrcode {
+    z-index: 101;
+    top: 50%;
+    left: 50%;
+    position: fixed;
+    width: 256px;
+    height: 256px;
+    margin-top: -128px;
+    margin-left: -128px;
+}

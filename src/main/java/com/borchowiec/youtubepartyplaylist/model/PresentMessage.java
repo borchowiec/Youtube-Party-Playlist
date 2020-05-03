@@ -8,6 +8,7 @@ public class PresentMessage {
     private String username;
     private UserType userType;
     private String userId;
+    private String playlistAuthorization;
 
     public MessageType getType() {
         return type;
@@ -35,5 +36,13 @@ public class PresentMessage {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getPlaylistAuthorization() {
+        return playlistAuthorization;
+    }
+
+    public void setPlaylistAuthorization(String playlistAuthorization) {
+        this.playlistAuthorization = playlistAuthorization;
     }
 }

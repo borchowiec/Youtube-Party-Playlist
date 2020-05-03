@@ -234,6 +234,13 @@ function createPlaylistElement(index, video) {
     downContainer.append(downBtn);
     buttonsContainer.append(downContainer);
 
+    // ban button
+    const banBtn = $('<button class="button is-danger is-small"><i class="fas fa-ban"></i></button>');
+    banBtn.on("click", () => banVideo(video.id, video.title));
+    const banContainer = $('<div class="column"></div>');
+    banContainer.append(banBtn);
+    buttonsContainer.append(banContainer);
+
     buttons.append(buttonsContainer);
     tr.append(buttons);
 
@@ -252,6 +259,38 @@ function setPlaylistFromCookies() {
     }
 
     videos = playlistContent;
+}
+
+function initDurationFilter() {
+    // add duration filter
+    $("#maxDurationCheckbox").change(() => {
+        const checked = $("#maxDurationCheckbox").prop("checked")
+        if (checked) {
+            const maxDuration = parseInt($("#maxDurationInput").val());
+            Cookies.set("maxDuration", maxDuration);
+
+            videoFilters.set("maxDuration", {
+                filter: (video) => {
+                    return (new Duration(video.contentDetails.duration)).inMinutes() > maxDuration;
+                },
+                errorMessage: `Video cannot be longer than ${maxDuration} minutes.`
+            })
+        }
+        else {
+            videoFilters.delete("maxDuration")
+        }
+
+        Cookies.set("maxDurationFilter", checked);
+    })
+
+    const maxDuration = Cookies.get("maxDuration")
+    if (maxDuration) {
+        $("#maxDurationInput").val(parseInt(maxDuration));
+    }
+
+    if (Cookies.get("maxDurationFilter") === "true") {
+        $("#maxDurationCheckbox").click();
+    }
 }
 
 $(document).ready(function() {
@@ -294,12 +333,20 @@ $(document).ready(function() {
     $("#resetNotification .delete").on("click", () => resetNotification.hide());
     $("#resetNotification .no").on("click", () => resetNotification.hide());
     $("#resetNotification .yes").on("click", () => {
+        // videos
         videos = [];
         Cookies.set("playlistContent", JSON.stringify(videos));
         refreshPlaylist();
         sendUpdatedPlaylist(videos);
         player.stopVideo();
         resetNotification.hide();
+
+        // banned videos
+        bannedVideos = new Map();
+        refreshBannedVideos();
     });
+
+    initDurationFilter();
+
     initYoutubeIframe();
 });
